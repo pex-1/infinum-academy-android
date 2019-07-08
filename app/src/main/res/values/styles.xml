@@ -11,7 +11,13 @@
     <style name="EditTextTheme" parent="@android:style/Widget.EditText">
         <item name="android:textColor">@color/colorPrimary</item>
         <item name="android:colorControlNormal">#eaeaea</item>
-        <item name="android:colorControlActivated">#61d08282</item>
+        <item name="android:colorControlActivated">@color/dark_red</item>
+        <item name="android:colorAccent">@color/dark_red</item>
+    </style>
+
+    <style name="warning_style" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/warning</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
 </resources>

@@ -11,7 +11,6 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginStart="148dp"
             android:layout_marginEnd="132dp"
@@ -20,34 +19,43 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/appCompatImageView"/>
-    <EditText
-            android:layout_width="0dp"
-            android:layout_height="64dp"
-            android:inputType="textPersonName"
-            android:hint="@string/username"
-            android:paddingBottom="15dp"
-            android:textSize="16sp"
-            android:ems="10"
-            android:id="@+id/usernameEditText"
+
+
+    <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+
             android:layout_marginTop="31dp"
             app:layout_constraintTop_toBottomOf="@+id/appCompatImageView"
-            android:theme="@style/EditTextTheme"/>
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/warning_style">
+
+        <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/username"
+                android:textSize="16sp"
+                android:id="@+id/usernameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/EditTextTheme"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
+            app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             app:passwordToggleEnabled="true"
             android:hint="@string/password"
-            app:hintAnimationEnabled="false"
             app:passwordToggleDrawable="@drawable/password_selector"
             app:passwordToggleTint="@color/passwordColor"
             android:id="@+id/textInputLayout">
@@ -66,14 +74,11 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-
-
     <Button
             android:text="@string/log_in"
             android:layout_width="328dp"
             android:layout_height="48dp"
             android:id="@+id/logInButton"
-            android:paddingBottom="13dp"
             android:enabled="false"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="16dp"
@@ -82,20 +87,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="72dp"
             app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-            android:background="#ffccd5"/>
-    <TextView
-            android:text="@string/this_username_already_exists"
-            android:textSize="12sp"
-            android:visibility="gone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/warningTextView"
-            android:textColor="@color/warning"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/usernameEditText"
-    />
+            android:background="@color/button_disabled"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

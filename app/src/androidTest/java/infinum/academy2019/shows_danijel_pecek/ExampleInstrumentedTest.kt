@@ -1,4 +1,4 @@
-package infinum.academy2019.homework2
+package infinum.academy2019.shows_danijel_pecek
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

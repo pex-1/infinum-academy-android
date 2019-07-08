@@ -1,15 +1,11 @@
-package infinum.academy2019.homework2
+package infinum.academy2019.shows_danijel_pecek
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_login.*
-import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
 
@@ -34,29 +30,29 @@ class LoginActivity : AppCompatActivity() {
                 if(usernameInput.isNotEmpty() && passwordInput.isNotEmpty() && passwordInput.length > 2 && emailValid(usernameInput)){
                     logInButton.isEnabled = true
                     logInButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorAccent))
+                }else{
+                    logInButton.isEnabled = false
+                    logInButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.button_disabled))
                 }
             }
-
         }
         usernameEditText.addTextChangedListener(textWatcher)
         passwordEditText.addTextChangedListener(textWatcher)
 
 
         logInButton.setOnClickListener {
-            //using a local variable "userInput"?
             startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
-
-            //Toast.makeText(this,"button working",Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 
     fun emailValid(email: String): Boolean{
         if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            warningTextView.text = WARNING
-            warningTextView.visibility = View.VISIBLE
+            usernameInputLayout.error = WARNING
             return false
         }
-        warningTextView.visibility = View.GONE
+        usernameInputLayout.error = null
         return true
     }
+
 }

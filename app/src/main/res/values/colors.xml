@@ -7,4 +7,6 @@
     <color name="buttonEnabled">#ff758c</color>
     <color name="warning">#ff758c</color>
     <color name="passwordColor">#ff758c</color>
+    <color name="button_disabled">#ffccd5</color>
+    <color name="dark_red">#61d08282</color>
 </resources>
