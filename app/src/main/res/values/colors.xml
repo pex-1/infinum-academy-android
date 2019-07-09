@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="buttonEnabled">#ff758c</color>
+    <color name="warning">#ff758c</color>
+    <color name="passwordColor">#ff758c</color>
+    <color name="button_disabled">#ffccd5</color>
+    <color name="dark_red">#61d08282</color>
+    <color name="welcome_text">#505050</color>
+    <color name="you_re_in_text">#2e2e2e</color>
 </resources>
