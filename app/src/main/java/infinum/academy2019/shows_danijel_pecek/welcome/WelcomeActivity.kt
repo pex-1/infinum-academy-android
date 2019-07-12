@@ -1,9 +1,10 @@
-package infinum.academy2019.shows_danijel_pecek
+package infinum.academy2019.shows_danijel_pecek.welcome
 
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import infinum.academy2019.shows_danijel_pecek.R
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 class WelcomeActivity : AppCompatActivity() {

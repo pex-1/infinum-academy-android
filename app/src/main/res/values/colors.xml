@@ -4,11 +4,12 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#D81B60</color>
 
-    <color name="buttonEnabled">#ff758c</color>
-    <color name="warning">#ff758c</color>
-    <color name="passwordColor">#ff758c</color>
     <color name="button_disabled">#ffccd5</color>
     <color name="dark_red">#61d08282</color>
-    <color name="welcome_text">#505050</color>
-    <color name="you_re_in_text">#2e2e2e</color>
+    <color name="subtitle_text">#505050</color>
+    <color name="title_text">#2e2e2e</color>
+
+    <color name="main_color">#ff758c</color>
+    <color name="white">#fff</color>
+    <color name="year_text">#a0a0a0</color>
 </resources>
