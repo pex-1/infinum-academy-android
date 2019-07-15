@@ -9,18 +9,21 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
+import infinum.academy2019.shows_danijel_pecek.adapter.EpisodesAdapter
 import infinum.academy2019.shows_danijel_pecek.addEpisode.AddEpisodeActivity
+import infinum.academy2019.shows_danijel_pecek.model.Episode
 import infinum.academy2019.shows_danijel_pecek.model.Show
 import kotlinx.android.synthetic.main.activity_episodes.*
 
 const val EPISODES_ACTIVITY_REQUEST_CODE = 2
 
 lateinit var show: Show
-class EpisodesActivity : AppCompatActivity() {
+class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
+
 
     companion object {
         const val SHOW = "SHOW"
@@ -36,28 +39,24 @@ class EpisodesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_episodes)
 
-        setSupportActionBar(toolbarEpisodes as Toolbar?)
+        setSupportActionBar(toolbarEpisodes)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        show =
-            Utils.deserialize(intent.getStringExtra(SHOW)!!)
-        (toolbarEpisodes as Toolbar?)!!.title = show.name
+        show = Utils.deserialize(intent.getStringExtra(SHOW)!!)
+        (toolbarEpisodes)?.title = show.name
 
         showDescriptionTextView.text = show.description
 
+
         addEpisodesClickableTextView.setOnClickListener {
-            startActivityForResult(AddEpisodeActivity.newInstance(this@EpisodesActivity),
+            startActivityForResult(AddEpisodeActivity.newInstance(this),
                 EPISODES_ACTIVITY_REQUEST_CODE
             )
         }
 
-        episodesListView.setOnItemClickListener { _, _, position, _ ->
-            Toast.makeText(this, "Description: ${show.episodeList[position].description}",Toast.LENGTH_SHORT).show()
-        }
 
         updateEpisodes()
 
-        val mFab = findViewById<FloatingActionButton>(R.id.episodesFab)
-        mFab.setOnClickListener {
+        episodesFab.setOnClickListener {
             startActivityForResult(AddEpisodeActivity.newInstance(this),
                 EPISODES_ACTIVITY_REQUEST_CODE
             )
@@ -66,22 +65,20 @@ class EpisodesActivity : AppCompatActivity() {
         returnResult(show)
     }
 
+    override fun onClick(episode: Episode) {
+        Toast.makeText(this, "Description: ${episode.description}",Toast.LENGTH_SHORT).show()
+    }
+
     private fun updateEpisodes() {
-        if (show.episodeList.size < 1) {
+        if (show.episodeList.isEmpty()) {
             noShowsLinearLayout.visibility = View.VISIBLE
         } else {
             noShowsLinearLayout.visibility = View.GONE
-            episodesListView.visibility = View.VISIBLE
+            episodesRecyclerView.visibility = View.VISIBLE
 
 
-            val list: MutableList<String> = ArrayList()
-            var num = 1
-            for(i in show.episodeList){
-                list.add("$num. ${i.title}")
-                num++
-            }
-            episodesListView.adapter = ArrayAdapter(this,
-                R.layout.item_list_view, list)
+            episodesRecyclerView.layoutManager = LinearLayoutManager(this)
+            episodesRecyclerView.adapter = EpisodesAdapter(show.episodeList, this)
         }
     }
 
@@ -95,6 +92,11 @@ class EpisodesActivity : AppCompatActivity() {
         returnResult(show)
         onBackPressed()
         return true
+    }
+
+    override fun onBackPressed() {
+        returnResult(show)
+        super.onBackPressed()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

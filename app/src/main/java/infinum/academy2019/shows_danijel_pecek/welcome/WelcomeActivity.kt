@@ -4,8 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import infinum.academy2019.shows_danijel_pecek.R
+import infinum.academy2019.shows_danijel_pecek.shows.ShowsActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
+
+
+
+
 
 class WelcomeActivity : AppCompatActivity() {
 
@@ -23,6 +29,12 @@ class WelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
 
+
         welcomeTextView.text = "Welcome ${intent.getStringExtra(USERNAME)}"
+
+
+        Handler().postDelayed({
+            startActivity(ShowsActivity.newInstance(this))
+        }, 3000)
     }
 }

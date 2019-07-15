@@ -7,9 +7,16 @@
         android:layout_height="match_parent"
         tools:context=".addEpisode.AddEpisodeActivity">
 
-    <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar"/>
+
+    <androidx.appcompat.widget.Toolbar
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/toolbarAddEpisode"
+            app:title="Add episode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
 
     <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameInputLayout"

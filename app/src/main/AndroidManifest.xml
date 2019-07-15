@@ -13,15 +13,14 @@
         </activity>
         <activity android:name=".episodes.EpisodesActivity">
         </activity>
-        <activity android:name=".shows.ShowsActivity">
+        <activity android:name=".shows.ShowsActivity"/>
+        <activity android:name=".welcome.WelcomeActivity"/>
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".welcome.WelcomeActivity"/>
-        <activity android:name=".login.LoginActivity">
         </activity>
     </application>
 

@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.shows
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -17,8 +18,12 @@ const val SHOW_ACTIVITY_REQUEST_CODE = 1
 
 class ShowsActivity : AppCompatActivity(), ShowsAdapter.OnShowClicked {
 
+    companion object {
+        fun newInstance(context: Context): Intent = Intent(context, ShowsActivity::class.java)
+    }
+
+
     val listOfShows = arrayListOf<Show>()
-    //var listOfEpisodes = arrayListOf<String>()
 
     init {
         with(listOfShows){

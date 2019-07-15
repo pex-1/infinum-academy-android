@@ -19,11 +19,13 @@ class ShowsAdapter(private val listShows: ArrayList<Show>, private val clickList
     override fun getItemCount(): Int = listShows.size
 
     override fun onBindViewHolder(holder: ShowsViewHolder, position: Int) {
+        val show = listShows[position]
+
         with(holder.itemView){
-            showTitleTextView.text = listShows[position].name
-            showYearTextView.text = listShows[position].date
-            showImageView.setImageResource(listShows[position].image)
-            rootView.setOnClickListener{clickListener.onClick(listShows[position])}
+            showTitleTextView.text = show.name
+            showYearTextView.text = show.date
+            showImageView.setImageResource(show.image)
+            rootView.setOnClickListener{clickListener.onClick(show)}
         }
     }
 

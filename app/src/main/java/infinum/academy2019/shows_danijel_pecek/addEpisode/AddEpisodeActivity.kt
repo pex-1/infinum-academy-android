@@ -21,12 +21,15 @@ class AddEpisodeActivity : AppCompatActivity() {
         fun newInstance(context: Context): Intent = Intent(context, AddEpisodeActivity::class.java)
     }
 
+    var exit = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_episode)
 
-        setSupportActionBar(toolbar as androidx.appcompat.widget.Toolbar?)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        setSupportActionBar(toolbarAddEpisode)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
 
 
         val textWatcher: TextWatcher = object : TextWatcher {
@@ -37,6 +40,8 @@ class AddEpisodeActivity : AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val titleInput = titleEditText.text.toString().trim()
                 val descriptionInput = descriptionEditText.text.toString().trim()
+
+                exit = !(titleInput.isNotEmpty() || descriptionInput.isNotEmpty())
 
                 if (titleInput.isNotEmpty() && descriptionInput.isNotEmpty()) {
                     episodeDescriptionInputLayout.error = null
@@ -80,18 +85,21 @@ class AddEpisodeActivity : AppCompatActivity() {
     }
 
     private fun backButton() {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle(Constants.BACK_BUTTON_TITLE)
-        alertDialog.setMessage(Constants.BACK_BUTTON_MESSAGE)
-        alertDialog.setPositiveButton("Yes") { _, _ ->
-            finish()
+        if(exit) finish()
+        else {
+            val alertDialog = AlertDialog.Builder(this)
+            alertDialog.setTitle(Constants.BACK_BUTTON_TITLE)
+            alertDialog.setMessage(Constants.BACK_BUTTON_MESSAGE)
+            alertDialog.setPositiveButton("Yes") { _, _ ->
+                finish()
+            }
+
+            alertDialog.setNegativeButton(
+                "No"
+            ) { dialog, _ -> dialog.cancel() }
+
+            alertDialog.create()
+            alertDialog.show()
         }
-
-        alertDialog.setNegativeButton(
-            "No"
-        ) { dialog, _ -> dialog.cancel() }
-
-        alertDialog.create()
-        alertDialog.show()
     }
 }
