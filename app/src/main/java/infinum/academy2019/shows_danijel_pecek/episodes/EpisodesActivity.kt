@@ -6,14 +6,10 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Toast
-import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.DetailsActivity
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.adapter.EpisodesAdapter
 import infinum.academy2019.shows_danijel_pecek.addEpisode.AddEpisodeActivity
 import infinum.academy2019.shows_danijel_pecek.model.Episode
@@ -50,21 +46,21 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
 
 
         addEpisodesClickableTextView.setOnClickListener {
-            startActivityForResult(AddEpisodeActivity.newInstance(this),EPISODES_ACTIVITY_REQUEST_CODE)
+            startActivityForResult(AddEpisodeActivity.newInstance(this), EPISODES_ACTIVITY_REQUEST_CODE)
         }
 
 
         updateEpisodes()
 
         episodesFab.setOnClickListener {
-            startActivityForResult(AddEpisodeActivity.newInstance(this),EPISODES_ACTIVITY_REQUEST_CODE)
+            startActivityForResult(AddEpisodeActivity.newInstance(this), EPISODES_ACTIVITY_REQUEST_CODE)
         }
 
         returnResult(show)
     }
 
+
     override fun onClick(episode: Episode) {
-        //Toast.makeText(this, "Description: ${episode.description}", Toast.LENGTH_SHORT).show()
         startActivity(DetailsActivity.newInstance(this, episode))
     }
 
@@ -87,16 +83,6 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
         setResult(Activity.RESULT_OK, resultIntent)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        returnResult(show)
-        onBackPressed()
-        return true
-    }
-
-    override fun onBackPressed() {
-        returnResult(show)
-        super.onBackPressed()
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -109,5 +95,16 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     override fun onResume() {
         super.onResume()
         updateEpisodes()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        returnResult(show)
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        returnResult(show)
+        super.onBackPressed()
     }
 }

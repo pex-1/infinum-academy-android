@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.episodes.EpisodesActivity
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.adapter.ShowsAdapter
 import infinum.academy2019.shows_danijel_pecek.model.Show
 import kotlinx.android.synthetic.main.activity_shows.*

@@ -32,7 +32,6 @@ private var seasonDefault = 1
 private var episodeDefault = 1
 
 
-
 class AddEpisodeActivity : AppCompatActivity() {
 
     companion object {
