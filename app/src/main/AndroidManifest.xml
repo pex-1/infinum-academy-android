@@ -9,9 +9,13 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name="infinum.academy2019.shows_danijel_pecek.WelcomeActivity"/>
-
-        <activity android:name="infinum.academy2019.shows_danijel_pecek.LoginActivity">
+        <activity android:name=".addEpisode.AddEpisodeActivity">
+        </activity>
+        <activity android:name=".episodes.EpisodesActivity">
+        </activity>
+        <activity android:name=".shows.ShowsActivity"/>
+        <activity android:name=".welcome.WelcomeActivity"/>
+        <activity android:name=".login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 

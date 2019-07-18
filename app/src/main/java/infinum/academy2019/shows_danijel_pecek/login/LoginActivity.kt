@@ -1,10 +1,11 @@
-package infinum.academy2019.shows_danijel_pecek
+package infinum.academy2019.shows_danijel_pecek.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.core.content.ContextCompat
+import infinum.academy2019.shows_danijel_pecek.R
+import infinum.academy2019.shows_danijel_pecek.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 const val WARNING = "Please enter a valid email address"
@@ -26,16 +27,9 @@ class LoginActivity : AppCompatActivity() {
                 val usernameInput = usernameEditText.text.toString().trim()
                 val passwordInput = passwordEditText.text.toString().trim()
 
-                if (usernameInput.isNotEmpty() && passwordInput.isNotEmpty() && passwordInput.length > 7 && emailValid(
-                        usernameInput
-                    )
-                ) {
-                    logInButton.isEnabled = true
-                    logInButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.colorAccent))
-                } else {
-                    logInButton.isEnabled = false
-                    logInButton.setBackgroundColor(ContextCompat.getColor(applicationContext, R.color.button_disabled))
-                }
+                logInButton.isEnabled = usernameInput.isNotEmpty() && passwordInput.isNotEmpty() && passwordInput.length > 7 && emailValid(
+                    usernameInput
+                )
             }
         }
         usernameEditText.addTextChangedListener(textWatcher)
@@ -43,7 +37,12 @@ class LoginActivity : AppCompatActivity() {
 
 
         logInButton.setOnClickListener {
-            startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
+            startActivity(
+                WelcomeActivity.newInstance(
+                    this,
+                    usernameEditText.text.toString().trim()
+                )
+            )
             finish()
         }
     }

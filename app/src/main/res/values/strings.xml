@@ -5,4 +5,13 @@
     <string name="this_username_already_exists">This username already exists</string>
     <string name="username">Username</string>
     <string name="you_re_in">You\'re in!</string>
+    <string name="episode_description">Episode description</string>
+    <string name="episode_title">Episode title</string>
+    <string name="button_save">SAVE</string>
+    <string name="episodes">Episodes</string>
+    <string name="asleep">Someone has fallen asleep.\n Don\'t wake him up.</string>
+    <string name="add_some_episodes">Add some episodes</string>
+    <string name="shows">Shows</string>
+    <string name="movie_poster">movie poster</string>
+    <string name="toolbar_title">Toolbar title</string>
 </resources>
