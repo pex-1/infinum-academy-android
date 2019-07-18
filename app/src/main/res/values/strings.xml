@@ -14,4 +14,11 @@
     <string name="shows">Shows</string>
     <string name="movie_poster">movie poster</string>
     <string name="toolbar_title">Toolbar title</string>
+    <string name="remember_me">Remember me</string>
+    <string name="upload_photo">Upload photo</string>
+    <string name="upload_photo_icon">Upload photo icon</string>
+    <string name="season_and_episode"><![CDATA[Season & episode]]></string>
+    <string name="episode">Episode</string>
+    <string name="season">Season</string>
+    <string name="save">SAVE</string>
 </resources>

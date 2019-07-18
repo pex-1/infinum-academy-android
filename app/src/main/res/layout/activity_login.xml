@@ -72,6 +72,18 @@
                 android:theme="@style/EditTextTheme"
         />
 
+        <CheckBox
+                android:text="@string/remember_me"
+                android:textColor="@color/subtitle_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rememberMeCheckBox"
+                android:layout_marginTop="16dp"
+                app:buttonTint="@color/main_color"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@+id/passwordInputLayout"
+                app:layout_constraintStart_toStartOf="@+id/passwordInputLayout"/>
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button

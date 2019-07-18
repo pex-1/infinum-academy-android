@@ -22,7 +22,8 @@ class EpisodesAdapter(private val episodes: ArrayList<Episode>, private val clic
         val episode = episodes[position]
 
         with(holder.itemView){
-            episodeItemTextView.text = episode.title
+            episodeNameTextView.text = episode.title
+            seasonTextView.text = episode.season
             rootView.setOnClickListener{clickListener.onClick(episode)}
         }
     }
