@@ -5,4 +5,4 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Episode(val title: String, val description: String, val season: String, val image: Uri?): Parcelable
+data class Episode(val title: String, val description: String, val season: Int, val episode: Int, val image: Uri?): Parcelable

@@ -18,7 +18,6 @@ const val SKIP_LOGIN = "SKIP_LOGIN"
 
 class LoginActivity : AppCompatActivity() {
 
-    var loginCheckbox = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
 
         logInButton.setOnClickListener {
             if (rememberMeCheckBox.isChecked) {
-                loginCheckbox = true
                 sharedPreferenceEditor = sharedPreferences.edit()
                 sharedPreferenceEditor.putBoolean(SKIP_LOGIN, true)
                 sharedPreferenceEditor.apply()

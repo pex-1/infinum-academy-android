@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinum.academy2019.shows_danijel_pecek.R
+import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.model.Episode
 import kotlinx.android.synthetic.main.item_episode.view.*
 
@@ -23,7 +24,7 @@ class EpisodesAdapter(private val episodes: ArrayList<Episode>, private val clic
 
         with(holder.itemView){
             episodeNameTextView.text = episode.title
-            seasonTextView.text = episode.season
+            seasonTextView.text = Utils.setSeasonString(episode.season, episode.episode)
             rootView.setOnClickListener{clickListener.onClick(episode)}
         }
     }

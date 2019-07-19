@@ -15,6 +15,8 @@ import infinum.academy2019.shows_danijel_pecek.addEpisode.AddEpisodeActivity
 import infinum.academy2019.shows_danijel_pecek.model.Episode
 import infinum.academy2019.shows_danijel_pecek.model.Show
 import kotlinx.android.synthetic.main.activity_episodes.*
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 
 const val EPISODES_ACTIVITY_REQUEST_CODE = 2
 
@@ -46,14 +48,14 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
 
 
         addEpisodesClickableTextView.setOnClickListener {
-            startActivityForResult(AddEpisodeActivity.newInstance(this), EPISODES_ACTIVITY_REQUEST_CODE)
+            startActivityForResult(AddEpisodeActivity.newInstance(this),EPISODES_ACTIVITY_REQUEST_CODE)
         }
 
 
         updateEpisodes()
 
         episodesFab.setOnClickListener {
-            startActivityForResult(AddEpisodeActivity.newInstance(this), EPISODES_ACTIVITY_REQUEST_CODE)
+            startActivityForResult(AddEpisodeActivity.newInstance(this),EPISODES_ACTIVITY_REQUEST_CODE)
         }
 
         returnResult(show)
@@ -84,6 +86,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     }
 
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == EPISODES_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
@@ -98,7 +101,6 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        returnResult(show)
         onBackPressed()
         return true
     }
