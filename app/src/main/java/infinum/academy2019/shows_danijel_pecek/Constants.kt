@@ -20,5 +20,10 @@ class Constants {
         const val EPISODES_LIST = "EPISODES_LIST"
         const val SHOW_WITH_EPISODES = "SHOW_WITH_EPISODES"
 
+        const val PICK_PHOTO_REQUEST = 5
+        const val TAKE_PHOTO_REQUEST = 6
+        const val REQUEST_CAMERA_PERMISSION = 7
+        const val REQUEST_GALLERY_PERMISSION = 8
+
     }
 }

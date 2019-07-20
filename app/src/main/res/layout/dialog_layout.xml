@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="312dp"
+        android:layout_height="335dp">
+
+
+    <TextView
+            android:text="@string/season"
+            android:layout_width="0dp"
+            android:layout_marginTop="53dp"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginStart="66dp"
+            android:textColor="@color/main_color"
+            android:id="@+id/seasonNumberPickerTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    <TextView
+            android:text="@string/episode"
+            app:layout_constraintLeft_toRightOf="@id/seasonNumberPickerTextView"
+            android:layout_marginStart="53dp"
+            android:layout_width="0dp"
+            android:textSize="16sp"
+            android:textColor="@color/main_color"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="187dp"
+            android:id="@+id/episodeNumberPickerTextView"
+            app:layout_constraintTop_toTopOf="@id/seasonNumberPickerTextView"/>
+
+    <NumberPicker
+            android:id="@+id/seasonNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/seasonNumberPickerTextView"
+            app:layout_constraintStart_toStartOf="@+id/seasonNumberPickerTextView"/>
+
+    <NumberPicker
+            android:id="@+id/episodeNumberPicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/episodeNumberPickerTextView"
+            app:layout_constraintStart_toStartOf="@+id/episodeNumberPickerTextView"/>
+    <Button
+            android:text="@string/save"
+            android:textColor="@color/main_color"
+            android:backgroundTint="@color/white"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="15dp"
+            android:id="@+id/dialogSaveButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            style="?android:attr/borderlessButtonStyle"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.episodes.EpisodesActivity
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.adapter.ShowsAdapter
 import infinum.academy2019.shows_danijel_pecek.model.Show
 import kotlinx.android.synthetic.main.activity_shows.*
@@ -102,19 +101,13 @@ class ShowsActivity : AppCompatActivity(), ShowsAdapter.OnShowClicked {
     }
 
     override fun onClick(show: Show) {
-        startActivityForResult(
-            EpisodesActivity.newInstance(
-                this,
-                Utils.serialize(show)
-            ), SHOW_ACTIVITY_REQUEST_CODE
-        )
+        startActivityForResult(EpisodesActivity.newInstance(this, show), SHOW_ACTIVITY_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == SHOW_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null){
-            val show =
-                Utils.deserialize(data.getStringExtra(Constants.SHOW_WITH_EPISODES)!!)
+            val show = data.getParcelableExtra<Show>(Constants.SHOW_WITH_EPISODES)
             listOfShows[show.id].episodeList = show.episodeList
         }
 
