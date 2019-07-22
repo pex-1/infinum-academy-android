@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import com.squareup.picasso.Picasso
-import infinum.academy2019.shows_danijel_pecek.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import kotlinx.android.synthetic.main.activity_details.*
 
 class DetailsActivity : AppCompatActivity() {
@@ -28,7 +28,7 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        val episode = intent.getParcelableExtra<Episode>(EPISODE)
+        val episode = Episode("","",2, 2, null)
 
         picassoUpload(episode.image, detailsEpisodeImageView)
         detailTitleTextView.text = episode.title

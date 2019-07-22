@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.shows.ShowsActivity
+import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 

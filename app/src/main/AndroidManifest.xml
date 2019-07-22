@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="infinum.academy2019.shows_danijel_pecek">
+          package="infinum.academy2019.shows_danijel_pecek">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
         <activity android:name=".DetailsActivity"></activity>
-        <activity android:name=".addEpisode.AddEpisodeActivity"></activity>
-        <activity android:name=".episodes.EpisodesActivity"></activity>
-        <activity android:name=".shows.ShowsActivity" />
-        <activity android:name=".welcome.WelcomeActivity" />
-        <activity android:name=".login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".ui.add_episode.AddEpisodeActivity"></activity>
+        <activity android:name=".ui.episodes.EpisodesActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
+        </activity>
+        <activity android:name=".ui.shows.ShowsActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".welcome.WelcomeActivity"/>
+        <activity android:name=".login.LoginActivity">
+
         </activity>
     </application>
 
