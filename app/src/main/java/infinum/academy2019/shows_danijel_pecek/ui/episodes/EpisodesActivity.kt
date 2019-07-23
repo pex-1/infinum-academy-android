@@ -8,7 +8,6 @@ import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import infinum.academy2019.shows_danijel_pecek.DetailsActivity
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.ui.add_episode.AddEpisodeActivity
 import infinum.academy2019.shows_danijel_pecek.data.model.Episode
@@ -21,16 +20,11 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
 
     private lateinit var viewModel: EpisodeViewModel
     private lateinit var adapter: EpisodesAdapter
-    var id = 0
+    //kako inicijaliziram ovo?
+    private var id = 0
 
     companion object {
-        const val SHOW = "SHOW"
-
-        fun newInstance(context: Context, showId: Int): Intent {
-            val intent = Intent(context, EpisodesActivity::class.java)
-            intent.putExtra(SHOW, showId)
-            return intent
-        }
+        fun newInstance(context: Context)= Intent(context, EpisodesActivity::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,58 +38,47 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
 
 
         adapter = EpisodesAdapter(this)
-        id = intent.getIntExtra(SHOW, 0)
 
         viewModel = ViewModelProviders.of(this).get(EpisodeViewModel::class.java)
+        id = viewModel.getShowId()
         viewModel.setShow(id)
-        viewModel.liveData.observe(this, Observer { show ->
-            if (show != null) {
-                adapter.setData(show.episodeList)
-                if(show.episodeList.size >0){
-                }
-
-
-                updateEpisodes()
+        viewModel.showLiveData.observe(this, Observer {
+            if (it != null) {
+                adapter.setData(it.episodeList)
             }
-
         })
 
 
-
-        viewModel.liveData.value?.image?.let {
+        viewModel.showLiveData.value?.image?.let {
             episodesImageView.setImageResource(it)
         }
-        episodeTitleTextView.text = viewModel.liveData.value?.name
-        showDescriptionTextView.text = viewModel.liveData.value?.description
+        episodeTitleTextView.text = viewModel.showLiveData.value?.name
+        showDescriptionTextView.text = viewModel.showLiveData.value?.description
 
 
         addEpisodesClickableTextView.setOnClickListener {
-            startActivity(AddEpisodeActivity.newInstance(this, id))
+            startActivity(AddEpisodeActivity.newInstance(this))
         }
 
 
         updateEpisodes()
 
         episodesFab.setOnClickListener {
-            startActivity(AddEpisodeActivity.newInstance(this, id))
+            startActivity(AddEpisodeActivity.newInstance(this))
         }
 
-        //returnResult(show)
     }
 
-
+    //možda nešto napravim s ovime kasnije - šteta bi bilo izbrisat
     override fun onClick(episode: Episode) {
-        startActivity(DetailsActivity.newInstance(this, episode))
     }
 
     private fun updateEpisodes() {
-        if (viewModel.liveData.value?.episodeList?.isEmpty()!!) {
+        if (viewModel.showLiveData.value?.episodeList?.isEmpty()!!) {
             noShowsLinearLayout.visibility = View.VISIBLE
         } else {
             noShowsLinearLayout.visibility = View.GONE
             episodesRecyclerView.visibility = View.VISIBLE
-
-            var list = viewModel.liveData.value?.episodeList!![0]
 
             episodesRecyclerView.layoutManager = LinearLayoutManager(this)
             episodesRecyclerView.adapter = adapter
@@ -103,22 +86,6 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     }
 
 
-    /*
-    private fun returnResult(show: Show) {
-        val resultIntent = Intent()
-        resultIntent.putExtra(Constants.SHOW_WITH_EPISODES, show)
-        setResult(Activity.RESULT_OK, resultIntent)
-    }*/
-
-
-/*
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == EPISODES_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
-            show.episodeList.add(data.getParcelableExtra(Constants.EPISODES_LIST))
-        }
-    }
-    */
 
     override fun onResume() {
         super.onResume()
@@ -128,10 +95,5 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
-    }
-
-    override fun onBackPressed() {
-        //returnResult(show)
-        super.onBackPressed()
     }
 }

@@ -34,16 +34,10 @@ import kotlinx.android.synthetic.main.dialog_layout.*
 class AddEpisodeActivity : AppCompatActivity() {
 
     private lateinit var viewModel: AddEpisodeViewModel
-    var showId = 0
+    private var showId = 0
 
     companion object {
-        const val SHOW_ID = "SHOW_ID"
-
-        fun newInstance(context: Context, showId: Int): Intent {
-            val intent = Intent(context, AddEpisodeActivity::class.java)
-            intent.putExtra(SHOW_ID, showId)
-            return intent
-        }
+        fun newInstance(context: Context) = Intent(context, AddEpisodeActivity::class.java)
 
         const val SEASON_MINIMUM = 0
         const val SEASON_MAXIMUM = 20
@@ -53,8 +47,11 @@ class AddEpisodeActivity : AppCompatActivity() {
         const val GALLERY_PERMISSION = "This app needs your permission to open gallery"
         const val NO_PERMISSION_CAMERA = "Can't open camera without the permission!"
         const val NO_PERMISSION_GALLERY = "Can't open gallery without the permission!"
+        const val PICTURE_WIDTH = 0
+        const val PICTURE_HEIGHT = 200
     }
 
+    //viewModel?
     var exit = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +62,8 @@ class AddEpisodeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-        showId = intent.getIntExtra(SHOW_ID, 0)
-
         viewModel = ViewModelProviders.of(this).get(AddEpisodeViewModel::class.java)
+        showId = viewModel.getShowId()
 
         pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
 
@@ -247,7 +243,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
 
     private fun picassoUpload(imageUri: Uri?, imageView: ImageView){
-        Picasso.with(this).load(imageUri).resize(0, 200)
+        Picasso.with(this).load(imageUri).resize(PICTURE_WIDTH, PICTURE_HEIGHT)
             .placeholder(R.drawable.ic_camera)
             .into(imageView)
     }
@@ -257,11 +253,6 @@ class AddEpisodeActivity : AppCompatActivity() {
         val episode = Episode(titleEditText.text.toString(), descriptionEditText.text.toString(), viewModel.seasonDefault, viewModel.episodeDefault, viewModel.fileUri)
 
         viewModel.saveEpisode(episode, showId)
-
-
-        val resultIntent = Intent()
-        resultIntent.putExtra(Constants.EPISODES_LIST, episode)
-        setResult(Activity.RESULT_OK, resultIntent)
         finish()
     }
 

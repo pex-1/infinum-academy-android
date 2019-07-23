@@ -31,19 +31,15 @@ class ShowsActivity : AppCompatActivity(), ShowsAdapter.OnShowClicked {
         showsRecyclerView.adapter = adapter
 
         viewModel = ViewModelProviders.of(this).get(ShowsViewModel::class.java)
-        viewModel.liveData.observe(this, Observer { shows ->
+        viewModel.showsLiveData.observe(this, Observer { shows ->
             if (shows != null) {
                 adapter.setData(shows)
             }
         })
-
     }
-
 
     override fun onClick(show: Show) {
-        startActivity(EpisodesActivity.newInstance(this, show.id))
+        viewModel.setId(show.id)
+        startActivity(EpisodesActivity.newInstance(this))
     }
-
-
-
 }

@@ -9,31 +9,28 @@ import infinum.academy2019.shows_danijel_pecek.data.repository.ShowsRepository
 
 class ShowsViewModel: ViewModel(), Observer<List<Show>>{
 
-    private val showsLiveData = MutableLiveData<List<Show>>()
+    private val _showsLiveData = MutableLiveData<List<Show>>()
 
-    val liveData: LiveData<List<Show>>
-        get(){
-            return showsLiveData
-        }
+    val showsLiveData: LiveData<List<Show>>
+        get() = _showsLiveData
+
 
     private var showsList = listOf<Show>()
 
     init {
-        showsLiveData.value = showsList
+        _showsLiveData.value = showsList
         ShowsRepository.getShows().observeForever(this)
     }
 
     override fun onChanged(shows: List<Show>?) {
-        showsList = shows?: listOf()        //nepotrebno?
-        showsLiveData.value = showsList
-    }
-
-    fun addShow(show: Show){
-        ShowsRepository.addShow(show)
+        _showsLiveData.value = shows?: listOf()     //nepotrebno?
     }
 
     override fun onCleared() {
         ShowsRepository.getShows().removeObserver(this)
     }
 
+    fun setId(showId: Int){
+        ShowsRepository.setShowId(showId)
+    }
 }

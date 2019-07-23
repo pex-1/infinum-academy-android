@@ -1,4 +1,4 @@
-package infinum.academy2019.shows_danijel_pecek.welcome
+package infinum.academy2019.shows_danijel_pecek.ui.welcome
 
 import android.content.Context
 import android.content.Intent

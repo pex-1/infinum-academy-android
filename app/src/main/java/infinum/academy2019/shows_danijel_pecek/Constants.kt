@@ -16,10 +16,6 @@ class Constants {
         const val BACK_BUTTON_TITLE = "Warning!"
         const val BACK_BUTTON_MESSAGE = "Are you sure you want to exit? All unsaved changes will be lost!"
 
-
-        const val EPISODES_LIST = "EPISODES_LIST"
-        const val SHOW_WITH_EPISODES = "SHOW_WITH_EPISODES"
-
         const val PICK_PHOTO_REQUEST = 5
         const val TAKE_PHOTO_REQUEST = 6
         const val REQUEST_CAMERA_PERMISSION = 7

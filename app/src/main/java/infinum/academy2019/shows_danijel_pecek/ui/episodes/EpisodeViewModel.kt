@@ -9,25 +9,17 @@ import infinum.academy2019.shows_danijel_pecek.data.repository.ShowsRepository
 
 class EpisodeViewModel: ViewModel() {
 
-    private var showsLiveData = MutableLiveData<Show>()
+    private var _showLiveData = MutableLiveData<Show>()
 
-
-    val liveData: LiveData<Show>
-        get(){
-            return showsLiveData
-        }
+    val showLiveData: LiveData<Show>
+        get()= _showLiveData
 
 
 
     fun setShow(showId: Int){
-        showsLiveData.value = (ShowsRepository.getShow(showId))
+        _showLiveData.value = (ShowsRepository.getShow(showId))
     }
 
-    fun addEpisode(episode: Episode){
-        val show = showsLiveData.value
-        show?.episodeList?.add(episode)
-        showsLiveData.postValue(show)
-
-    }
+    fun getShowId() = ShowsRepository.getShowId()
 
 }
