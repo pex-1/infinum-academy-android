@@ -30,7 +30,4 @@ class ShowsViewModel: ViewModel(), Observer<List<Show>>{
         ShowsRepository.getShows().removeObserver(this)
     }
 
-    fun setId(showId: Int){
-        ShowsRepository.setShowId(showId)
-    }
 }

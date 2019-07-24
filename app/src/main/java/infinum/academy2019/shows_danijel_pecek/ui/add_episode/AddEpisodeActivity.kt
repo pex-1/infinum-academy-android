@@ -37,7 +37,13 @@ class AddEpisodeActivity : AppCompatActivity() {
     private var showId = 0
 
     companion object {
-        fun newInstance(context: Context) = Intent(context, AddEpisodeActivity::class.java)
+        const val SHOW_ID_ADD = "SHOW_ID_ADD"
+
+        fun newInstance(context: Context, showId: Int): Intent {
+            val intent = Intent(context, AddEpisodeActivity::class.java)
+            intent.putExtra(SHOW_ID_ADD, showId)
+            return intent
+        }
 
         const val SEASON_MINIMUM = 0
         const val SEASON_MAXIMUM = 20
@@ -63,7 +69,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
 
         viewModel = ViewModelProviders.of(this).get(AddEpisodeViewModel::class.java)
-        showId = viewModel.getShowId()
+        showId = intent.getIntExtra(SHOW_ID_ADD, 0)
 
         pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
 
@@ -250,9 +256,7 @@ class AddEpisodeActivity : AppCompatActivity() {
 
 
     private fun save() {
-        val episode = Episode(titleEditText.text.toString(), descriptionEditText.text.toString(), viewModel.seasonDefault, viewModel.episodeDefault, viewModel.fileUri)
-
-        viewModel.saveEpisode(episode, showId)
+        viewModel.saveEpisode(showId)
         finish()
     }
 

@@ -39,7 +39,6 @@ class ShowsActivity : AppCompatActivity(), ShowsAdapter.OnShowClicked {
     }
 
     override fun onClick(show: Show) {
-        viewModel.setId(show.id)
-        startActivity(EpisodesActivity.newInstance(this))
+        startActivity(EpisodesActivity.newInstance(this, show.id))
     }
 }

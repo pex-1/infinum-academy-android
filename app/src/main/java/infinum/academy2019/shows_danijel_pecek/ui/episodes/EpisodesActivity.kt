@@ -24,7 +24,12 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     private var id = 0
 
     companion object {
-        fun newInstance(context: Context)= Intent(context, EpisodesActivity::class.java)
+        const val SHOW_ID = "SHOW_ID"
+        fun newInstance(context: Context, showId: Int): Intent {
+            val intent = Intent(context, EpisodesActivity::class.java)
+            intent.putExtra(SHOW_ID, showId)
+            return intent
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,38 +38,49 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
 
         setSupportActionBar(toolbarEpisodes)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //TODO: zasto je ovo uopce potrebno ako nigdje ne postavljam title?
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
         adapter = EpisodesAdapter(this)
 
         viewModel = ViewModelProviders.of(this).get(EpisodeViewModel::class.java)
-        id = viewModel.getShowId()
-        viewModel.setShow(id)
-        viewModel.showLiveData.observe(this, Observer {
+        id = intent.getIntExtra(SHOW_ID, 0)
+
+
+        viewModel.showsLiveData.observe(this, Observer {
             if (it != null) {
-                adapter.setData(it.episodeList)
+                adapter.setData(it[id].episodeList)
+
+
+                if(it[id].episodeList.isNotEmpty()){
+
+                    noShowsLinearLayout.visibility = View.GONE
+                    episodesRecyclerView.visibility = View.VISIBLE
+
+                    episodesRecyclerView.layoutManager = LinearLayoutManager(this)
+                    episodesRecyclerView.adapter = adapter
+                }
+                else{
+
+                }
             }
         })
 
 
-        viewModel.showLiveData.value?.image?.let {
+        viewModel.getShow(id)?.image?.let {
             episodesImageView.setImageResource(it)
         }
-        episodeTitleTextView.text = viewModel.showLiveData.value?.name
-        showDescriptionTextView.text = viewModel.showLiveData.value?.description
+        episodeTitleTextView.text = viewModel.getShow(id)?.name
+        showDescriptionTextView.text = viewModel.getShow(id)?.description
 
 
         addEpisodesClickableTextView.setOnClickListener {
-            startActivity(AddEpisodeActivity.newInstance(this))
+            startActivity(AddEpisodeActivity.newInstance(this, id))
         }
 
 
-        updateEpisodes()
-
         episodesFab.setOnClickListener {
-            startActivity(AddEpisodeActivity.newInstance(this))
+            startActivity(AddEpisodeActivity.newInstance(this, id))
         }
 
     }
@@ -73,24 +89,7 @@ class EpisodesActivity : AppCompatActivity(), EpisodesAdapter.OnEpisodeClicked {
     override fun onClick(episode: Episode) {
     }
 
-    private fun updateEpisodes() {
-        if (viewModel.showLiveData.value?.episodeList?.isEmpty()!!) {
-            noShowsLinearLayout.visibility = View.VISIBLE
-        } else {
-            noShowsLinearLayout.visibility = View.GONE
-            episodesRecyclerView.visibility = View.VISIBLE
 
-            episodesRecyclerView.layoutManager = LinearLayoutManager(this)
-            episodesRecyclerView.adapter = adapter
-        }
-    }
-
-
-
-    override fun onResume() {
-        super.onResume()
-        updateEpisodes()
-    }
 
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()

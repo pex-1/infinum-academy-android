@@ -14,10 +14,9 @@ class AddEpisodeViewModel(application: Application) : AndroidViewModel(applicati
     var seasonDefault = 1
     var episodeDefault = 1
 
-    fun getShowId() = ShowsRepository.getShowId()
 
-    fun saveEpisode(episode: Episode, showId: Int){
-        ShowsRepository.saveEpisodes(episode, showId)
+    fun saveEpisode(showId: Int){
+        ShowsRepository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
     }
 
 

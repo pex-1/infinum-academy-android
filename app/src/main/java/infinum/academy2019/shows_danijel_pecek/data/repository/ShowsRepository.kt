@@ -11,7 +11,6 @@ object ShowsRepository {
 
     private val showsList = mutableListOf<Show>()
     private val shows = MutableLiveData<List<Show>>()
-    private var showId = 0
 
     init {
         with(showsList){
@@ -47,11 +46,6 @@ object ShowsRepository {
         shows.value = showsList
     }
 
-    fun setShowId(id: Int){
-        showId = id
-    }
-
-    fun getShowId() = showId
 
     fun getShows() : LiveData<List<Show>> = shows
 
