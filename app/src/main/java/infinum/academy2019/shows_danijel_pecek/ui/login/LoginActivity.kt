@@ -1,4 +1,4 @@
-package infinum.academy2019.shows_danijel_pecek.login
+package infinum.academy2019.shows_danijel_pecek.ui.login
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,11 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.view.View
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.shows.ShowsActivity
-import infinum.academy2019.shows_danijel_pecek.welcome.WelcomeActivity
+import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
+import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 
 const val WARNING = "Please enter a valid email address"

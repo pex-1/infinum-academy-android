@@ -1,4 +1,4 @@
-package infinum.academy2019.shows_danijel_pecek.adapter
+package infinum.academy2019.shows_danijel_pecek.ui.episodes
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
-import infinum.academy2019.shows_danijel_pecek.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import kotlinx.android.synthetic.main.item_episode.view.*
 
-class EpisodesAdapter(private val episodes: ArrayList<Episode>, private val clickListener: OnEpisodeClicked): RecyclerView.Adapter<EpisodesAdapter.EpisodesViewHolder>() {
+class EpisodesAdapter(private val clickListener: OnEpisodeClicked): RecyclerView.Adapter<EpisodesAdapter.EpisodesViewHolder>() {
 
-
+    private var episodes = listOf<Episode>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodesViewHolder {
         return EpisodesViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_episode, parent, false))
@@ -29,6 +29,10 @@ class EpisodesAdapter(private val episodes: ArrayList<Episode>, private val clic
         }
     }
 
+    fun setData(episodes: List<Episode>){
+        this.episodes = episodes
+        notifyDataSetChanged()
+    }
 
     inner class EpisodesViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 

@@ -1,4 +1,4 @@
-package infinum.academy2019.shows_danijel_pecek.addEpisode
+package infinum.academy2019.shows_danijel_pecek.ui.add_episode
 
 import android.Manifest
 import android.app.Activity
@@ -7,7 +7,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -20,31 +19,32 @@ import kotlinx.android.synthetic.main.activity_add_episode.*
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
-import infinum.academy2019.shows_danijel_pecek.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import kotlinx.android.synthetic.main.dialog_layout.*
 
-private var fileUri: Uri? = null
-private var titleInput = ""
-private var descriptionInput = ""
-private var seasonDefault = 1
-private var episodeDefault = 1
+
 
 
 class AddEpisodeActivity : AppCompatActivity() {
 
-    companion object {
-        fun newInstance(context: Context): Intent = Intent(context, AddEpisodeActivity::class.java)
+    private lateinit var viewModel: AddEpisodeViewModel
+    private var showId = 0
 
-        const val TITLE = "TITLE"
-        const val DESCRIPTION = "DESCRIPTION"
-        const val URI = "URI"
-        const val SEASON = "SEASON"
-        const val EPISODE = "EPISODE"
+    companion object {
+        const val SHOW_ID_ADD = "SHOW_ID_ADD"
+
+        fun newInstance(context: Context, showId: Int): Intent {
+            val intent = Intent(context, AddEpisodeActivity::class.java)
+            intent.putExtra(SHOW_ID_ADD, showId)
+            return intent
+        }
+
         const val SEASON_MINIMUM = 0
         const val SEASON_MAXIMUM = 20
         const val EPISODE_MINIMUM = 0
@@ -53,8 +53,11 @@ class AddEpisodeActivity : AppCompatActivity() {
         const val GALLERY_PERMISSION = "This app needs your permission to open gallery"
         const val NO_PERMISSION_CAMERA = "Can't open camera without the permission!"
         const val NO_PERMISSION_GALLERY = "Can't open gallery without the permission!"
+        const val PICTURE_WIDTH = 0
+        const val PICTURE_HEIGHT = 200
     }
 
+    //viewModel?
     var exit = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,25 +67,25 @@ class AddEpisodeActivity : AppCompatActivity() {
         setSupportActionBar(toolbarAddEpisode)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        if(savedInstanceState != null){
-            recoverData(savedInstanceState)
-        }
 
-        pickSeasonEpisodeTextView.text = Utils.setSeasonString(seasonDefault, episodeDefault)
+        viewModel = ViewModelProviders.of(this).get(AddEpisodeViewModel::class.java)
+        showId = intent.getIntExtra(SHOW_ID_ADD, 0)
+
+        pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
 
         pickSeasonEpisodeTextView.setOnClickListener {
             val dialog = Dialog(this)
             dialog.setContentView(R.layout.dialog_layout)
 
-            setNumberPickerValues(dialog.seasonNumberPicker, SEASON_MINIMUM, SEASON_MAXIMUM, seasonDefault)
-            setNumberPickerValues(dialog.episodeNumberPicker, EPISODE_MINIMUM, EPISODE_MAXIMUM, episodeDefault)
+            setNumberPickerValues(dialog.seasonNumberPicker, SEASON_MINIMUM, SEASON_MAXIMUM, viewModel.seasonDefault)
+            setNumberPickerValues(dialog.episodeNumberPicker, EPISODE_MINIMUM, EPISODE_MAXIMUM, viewModel.episodeDefault)
             dialog.show()
 
 
             dialog.dialogSaveButton.setOnClickListener {
                 setNumberPicker(dialog)
-                seasonDefault = dialog.seasonNumberPicker.value
-                episodeDefault = dialog.episodeNumberPicker.value
+                viewModel.seasonDefault = dialog.seasonNumberPicker.value
+                viewModel.episodeDefault = dialog.episodeNumberPicker.value
                 exit = false
                 dialog.dismiss()
             }
@@ -98,16 +101,16 @@ class AddEpisodeActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                titleInput = titleEditText.text.toString().trim()
-                descriptionInput = descriptionEditText.text.toString().trim()
+                viewModel.titleInput = titleEditText.text.toString().trim()
+                viewModel.descriptionInput = descriptionEditText.text.toString().trim()
 
-                exit = !(titleInput.isNotEmpty() || descriptionInput.isNotEmpty())
+                exit = !(viewModel.titleInput.isNotEmpty() || viewModel.descriptionInput.isNotEmpty())
 
-                if (titleInput.isNotEmpty() && descriptionInput.isNotEmpty()) {
+                if (viewModel.titleInput.isNotEmpty() && viewModel.descriptionInput.isNotEmpty()) {
                     episodeDescriptionInputLayout.error = null
                     usernameInputLayout.error = null
                     saveButton.isEnabled = true
-                } else if (titleInput.isEmpty()) {
+                } else if (viewModel.titleInput.isEmpty()) {
                     episodeDescriptionInputLayout.error = null
                     usernameInputLayout.error = Constants.TITLE_EMPTY_WARNING
                     saveButton.isEnabled = false
@@ -120,35 +123,20 @@ class AddEpisodeActivity : AppCompatActivity() {
         }
         titleEditText.addTextChangedListener(textWatcher)
         descriptionEditText.addTextChangedListener(textWatcher)
+        picassoUpload(viewModel.fileUri, uploadPhotoImageView)
 
         saveButton.setOnClickListener {
             save()
         }
     }
 
-    private fun recoverData(savedInstanceState: Bundle) {
-        picassoUpload(savedInstanceState.getParcelable(URI), uploadPhotoImageView)
-        titleInput = savedInstanceState.getString(TITLE).toString()
-        descriptionInput = savedInstanceState.getString(DESCRIPTION).toString()
-        seasonDefault = savedInstanceState.getInt(SEASON)
-        episodeDefault = savedInstanceState.getInt(EPISODE)
-    }
+
 
     private fun setNumberPicker(dialog: Dialog) {
         pickSeasonEpisodeTextView.text = Utils.setSeasonString(dialog.seasonNumberPicker.value, dialog.episodeNumberPicker.value)
 
     }
 
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString(TITLE, titleInput)
-        outState.putString(DESCRIPTION, descriptionInput)
-        outState.putParcelable(URI, fileUri)
-        outState.putInt(SEASON, seasonDefault)
-        outState.putInt(EPISODE, episodeDefault)
-
-        super.onSaveInstanceState(outState)
-    }
 
 
     private fun showPictureDialog() {
@@ -236,23 +224,22 @@ class AddEpisodeActivity : AppCompatActivity() {
     private fun launchCamera() {
         val values = ContentValues(1)
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-        fileUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        viewModel.fileUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         if (intent.resolveActivity(packageManager) != null) {
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, viewModel.fileUri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             startActivityForResult(intent, Constants.TAKE_PHOTO_REQUEST)
         }
     }
 
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && requestCode == Constants.TAKE_PHOTO_REQUEST) {
-            picassoUpload(fileUri, uploadPhotoImageView)
+            picassoUpload(viewModel.fileUri, uploadPhotoImageView)
         } else if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_PHOTO_REQUEST) {
-            fileUri = data?.data
-            picassoUpload(fileUri, uploadPhotoImageView)
+            viewModel.fileUri = data?.data
+            picassoUpload(viewModel.fileUri, uploadPhotoImageView)
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -262,17 +249,14 @@ class AddEpisodeActivity : AppCompatActivity() {
 
 
     private fun picassoUpload(imageUri: Uri?, imageView: ImageView){
-        Picasso.with(this).load(imageUri).resize(0, 200)
+        Picasso.with(this).load(imageUri).resize(PICTURE_WIDTH, PICTURE_HEIGHT)
             .placeholder(R.drawable.ic_camera)
             .into(imageView)
     }
 
 
     private fun save() {
-        val episode = Episode(titleEditText.text.toString(), descriptionEditText.text.toString(), seasonDefault, episodeDefault, fileUri)
-        val resultIntent = Intent()
-        resultIntent.putExtra(Constants.EPISODES_LIST, episode)
-        setResult(Activity.RESULT_OK, resultIntent)
+        viewModel.saveEpisode(showId)
         finish()
     }
 
