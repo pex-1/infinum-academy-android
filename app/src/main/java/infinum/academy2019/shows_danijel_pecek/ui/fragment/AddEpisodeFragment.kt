@@ -1,49 +1,44 @@
-package infinum.academy2019.shows_danijel_pecek.ui.add_episode
+package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.NumberPicker
-import kotlinx.android.synthetic.main.activity_add_episode.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
-import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import kotlinx.android.synthetic.main.dialog_layout.*
+import kotlinx.android.synthetic.main.fragment_add_episode.*
 
+class AddEpisodeFragment : Fragment() {
 
-
-
-class AddEpisodeActivity : AppCompatActivity() {
-
-    private lateinit var viewModel: AddEpisodeViewModel
+    private lateinit var viewModel: SharedDataViewModel
     private var showId = 0
 
     companion object {
         const val SHOW_ID_ADD = "SHOW_ID_ADD"
 
-        fun newInstance(context: Context, showId: Int): Intent {
-            val intent = Intent(context, AddEpisodeActivity::class.java)
-            intent.putExtra(SHOW_ID_ADD, showId)
-            return intent
-        }
 
         const val SEASON_MINIMUM = 0
         const val SEASON_MAXIMUM = 20
@@ -57,37 +52,58 @@ class AddEpisodeActivity : AppCompatActivity() {
         const val PICTURE_HEIGHT = 200
     }
 
-    //viewModel?
     var exit = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_episode)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.fragment_add_episode, container, false)
+    }
 
-        setSupportActionBar(toolbarAddEpisode)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
-        viewModel = ViewModelProviders.of(this).get(AddEpisodeViewModel::class.java)
-        showId = intent.getIntExtra(SHOW_ID_ADD, 0)
-
-        pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
-
-        pickSeasonEpisodeTextView.setOnClickListener {
-            val dialog = Dialog(this)
-            dialog.setContentView(R.layout.dialog_layout)
-
-            setNumberPickerValues(dialog.seasonNumberPicker, SEASON_MINIMUM, SEASON_MAXIMUM, viewModel.seasonDefault)
-            setNumberPickerValues(dialog.episodeNumberPicker, EPISODE_MINIMUM, EPISODE_MAXIMUM, viewModel.episodeDefault)
-            dialog.show()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
 
-            dialog.dialogSaveButton.setOnClickListener {
-                setNumberPicker(dialog)
-                viewModel.seasonDefault = dialog.seasonNumberPicker.value
-                viewModel.episodeDefault = dialog.episodeNumberPicker.value
-                exit = false
-                dialog.dismiss()
+
+        if (activity is AppCompatActivity) {
+            with((activity as AppCompatActivity)) {
+                setSupportActionBar(toolbarAddEpisodeFragment)
+
+            }
+
+        }
+        //setSupportActionBar(toolbarAddEpisode)
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        activity?.let {
+            viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
+
+            pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
+
+            pickSeasonEpisodeTextView.setOnClickListener {
+                val dialog = Dialog(requireContext())
+                dialog.setContentView(R.layout.dialog_layout)
+
+                setNumberPickerValues(
+                    dialog.seasonNumberPicker,
+                    SEASON_MINIMUM,
+                    SEASON_MAXIMUM,
+                    viewModel.seasonDefault
+                )
+                setNumberPickerValues(
+                    dialog.episodeNumberPicker,
+                    EPISODE_MINIMUM,
+                    EPISODE_MAXIMUM,
+                    viewModel.episodeDefault
+                )
+                dialog.show()
+
+
+                dialog.dialogSaveButton.setOnClickListener {
+                    setNumberPicker(dialog)
+                    viewModel.seasonDefault = dialog.seasonNumberPicker.value
+                    viewModel.episodeDefault = dialog.episodeNumberPicker.value
+                    exit = false
+                    dialog.dismiss()
+                }
             }
         }
 
@@ -128,19 +144,18 @@ class AddEpisodeActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
             save()
         }
+
     }
-
-
 
     private fun setNumberPicker(dialog: Dialog) {
-        pickSeasonEpisodeTextView.text = Utils.setSeasonString(dialog.seasonNumberPicker.value, dialog.episodeNumberPicker.value)
+        pickSeasonEpisodeTextView.text =
+            Utils.setSeasonString(dialog.seasonNumberPicker.value, dialog.episodeNumberPicker.value)
 
     }
-
 
 
     private fun showPictureDialog() {
-        val pictureDialog = AlertDialog.Builder(this)
+        val pictureDialog = AlertDialog.Builder(requireContext())
 
         val pictureDialogItems = arrayOf("Camera", "Gallery")
         pictureDialog.setItems(pictureDialogItems) { _, which ->
@@ -156,60 +171,88 @@ class AddEpisodeActivity : AppCompatActivity() {
         if (permissionsCamera()) {
             launchCamera()
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
 
-                AlertDialog.Builder(this).setTitle(CAMERA_PERMISSION)
+                AlertDialog.Builder(requireContext()).setTitle(Constants.CAMERA_PERMISSION)
                     .setNeutralButton("ok") { dialogInterface, _ ->
                         dialogInterface.dismiss()
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), Constants.REQUEST_CAMERA_PERMISSION)
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                            Constants.REQUEST_CAMERA_PERMISSION
+                        )
                     }.create().show()
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE), Constants.REQUEST_CAMERA_PERMISSION)
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    Constants.REQUEST_CAMERA_PERMISSION
+                )
             }
         }
     }
 
-    private fun handleGalleryPermission(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+    private fun handleGalleryPermission() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
             pickPhotoFromGallery()
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
 
-                AlertDialog.Builder(this).setTitle(GALLERY_PERMISSION)
+                AlertDialog.Builder(requireContext()).setTitle(Constants.GALLERY_PERMISSION)
                     .setNeutralButton("ok") { dialogInterface, _ ->
                         dialogInterface.dismiss()
-                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Constants.REQUEST_GALLERY_PERMISSION)
+                        ActivityCompat.requestPermissions(
+                            requireActivity(),
+                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                            Constants.REQUEST_GALLERY_PERMISSION
+                        )
                     }.create().show()
-            }
-            else {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), Constants.REQUEST_GALLERY_PERMISSION)
+            } else {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    Constants.REQUEST_GALLERY_PERMISSION
+                )
             }
         }
     }
 
-    private fun permissionsCamera() = ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+    private fun permissionsCamera() = ActivityCompat.checkSelfPermission(
+        requireContext(),
+        Manifest.permission.CAMERA
+    ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) == PackageManager.PERMISSION_GRANTED
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if(requestCode == Constants.REQUEST_CAMERA_PERMISSION){
-            if(grantResults.isNotEmpty() && permissionsCamera()){
+        if (requestCode == Constants.REQUEST_CAMERA_PERMISSION) {
+            if (grantResults.isNotEmpty() && permissionsCamera()) {
                 launchCamera()
-            }else{
-                createSnackbar(NO_PERMISSION_CAMERA)
+            } else {
+                createSnackbar(Constants.NO_PERMISSION_CAMERA)
             }
-        }else if(requestCode == Constants.REQUEST_GALLERY_PERMISSION){
-            if(grantResults.isNotEmpty() && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+        } else if (requestCode == Constants.REQUEST_GALLERY_PERMISSION) {
+            if (grantResults.isNotEmpty() && ActivityCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 pickPhotoFromGallery()
-            }else{
-                createSnackbar(NO_PERMISSION_GALLERY)
+            } else {
+                createSnackbar(Constants.NO_PERMISSION_GALLERY)
             }
         }
     }
 
     private fun createSnackbar(message: String) {
         val snackbar = Snackbar.make(snackbarLayout, message, Snackbar.LENGTH_LONG)
-        snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.main_color))
+        snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.main_color))
         snackbar.show()
     }
 
@@ -224,9 +267,10 @@ class AddEpisodeActivity : AppCompatActivity() {
     private fun launchCamera() {
         val values = ContentValues(1)
         values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-        viewModel.fileUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        viewModel.fileUri =
+            requireContext().contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if (intent.resolveActivity(packageManager) != null) {
+        if (intent.resolveActivity(requireContext().packageManager) != null) {
             intent.putExtra(MediaStore.EXTRA_OUTPUT, viewModel.fileUri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
             startActivityForResult(intent, Constants.TAKE_PHOTO_REQUEST)
@@ -248,16 +292,18 @@ class AddEpisodeActivity : AppCompatActivity() {
     }
 
 
-    private fun picassoUpload(imageUri: Uri?, imageView: ImageView){
-        Picasso.with(this).load(imageUri).resize(PICTURE_WIDTH, PICTURE_HEIGHT)
+    private fun picassoUpload(imageUri: Uri?, imageView: ImageView) {
+        Picasso.with(requireContext()).load(imageUri)
+            .resize(Constants.PICTURE_WIDTH, Constants.PICTURE_HEIGHT)
             .placeholder(R.drawable.ic_camera)
             .into(imageView)
     }
 
 
     private fun save() {
-        viewModel.saveEpisode(showId)
-        finish()
+        viewModel.currentShow?.id?.let { viewModel.saveEpisode(it) }
+        fragmentManager?.popBackStackImmediate()
+        //finish()
     }
 
 
@@ -269,34 +315,5 @@ class AddEpisodeActivity : AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        backButton()
-    }
 
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-
-    }
-
-    private fun backButton() {
-        if (exit){
-            finish()
-        }
-        else {
-            val alertDialog = AlertDialog.Builder(this)
-            alertDialog.setTitle(Constants.BACK_BUTTON_TITLE)
-            alertDialog.setMessage(Constants.BACK_BUTTON_MESSAGE)
-            alertDialog.setPositiveButton("Yes") { _, _ ->
-                finish()
-            }
-
-            alertDialog.setNegativeButton(
-                "No"
-            ) { dialog, _ -> dialog.cancel() }
-
-            alertDialog.create()
-            alertDialog.show()
-        }
-    }
 }

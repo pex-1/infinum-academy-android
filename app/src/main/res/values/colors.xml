@@ -13,4 +13,6 @@
     <color name="white">#fff</color>
     <color name="year_text">#a0a0a0</color>
     <color name="season">#a0a0a3</color>
+    <color name="divider">#979797</color>
+    <color name="highlighted_item">#a6d8d8d8</color>
 </resources>
