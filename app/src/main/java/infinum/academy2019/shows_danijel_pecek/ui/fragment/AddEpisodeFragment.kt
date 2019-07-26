@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -11,12 +12,9 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.NumberPicker
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -30,15 +28,19 @@ import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
 import kotlinx.android.synthetic.main.dialog_layout.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
+import java.lang.ClassCastException
 
 class AddEpisodeFragment : Fragment() {
 
+    interface AddEpisodeFragmentInterface {
+        fun fragmentActive(state: Boolean)
+    }
+
+    private var mListener: AddEpisodeFragmentInterface? = null
+
     private lateinit var viewModel: SharedDataViewModel
-    private var showId = 0
 
     companion object {
-        const val SHOW_ID_ADD = "SHOW_ID_ADD"
-
 
         const val SEASON_MINIMUM = 0
         const val SEASON_MAXIMUM = 20
@@ -58,20 +60,53 @@ class AddEpisodeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add_episode, container, false)
     }
 
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+
+        try {
+            mListener = context as (AddEpisodeFragmentInterface)
+        }catch (e: ClassCastException){
+            throw ClassCastException("${context.toString()} must implement listener" )
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mListener?.fragmentActive(true)
+    }
+    override fun onStop() {
+        super.onStop()
+        mListener?.fragmentActive(true)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        inflater?.inflate(R.menu.menu_main, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home) {
+            backButton()
+        }
+
+        return super.onOptionsItemSelected(item)
+    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-        if (activity is AppCompatActivity) {
-            with((activity as AppCompatActivity)) {
-                setSupportActionBar(toolbarAddEpisodeFragment)
-
-            }
-
+        with((requireActivity() as AppCompatActivity)) {
+            setSupportActionBar(toolbarAddEpisodeFragment)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
-        //setSupportActionBar(toolbarAddEpisode)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
@@ -173,7 +208,7 @@ class AddEpisodeFragment : Fragment() {
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
 
-                AlertDialog.Builder(requireContext()).setTitle(Constants.CAMERA_PERMISSION)
+                AlertDialog.Builder(requireContext()).setTitle(CAMERA_PERMISSION)
                     .setNeutralButton("ok") { dialogInterface, _ ->
                         dialogInterface.dismiss()
                         ActivityCompat.requestPermissions(
@@ -202,7 +237,7 @@ class AddEpisodeFragment : Fragment() {
         } else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), Manifest.permission.CAMERA)) {
 
-                AlertDialog.Builder(requireContext()).setTitle(Constants.GALLERY_PERMISSION)
+                AlertDialog.Builder(requireContext()).setTitle(GALLERY_PERMISSION)
                     .setNeutralButton("ok") { dialogInterface, _ ->
                         dialogInterface.dismiss()
                         ActivityCompat.requestPermissions(
@@ -235,7 +270,7 @@ class AddEpisodeFragment : Fragment() {
             if (grantResults.isNotEmpty() && permissionsCamera()) {
                 launchCamera()
             } else {
-                createSnackbar(Constants.NO_PERMISSION_CAMERA)
+                createSnackbar(NO_PERMISSION_CAMERA)
             }
         } else if (requestCode == Constants.REQUEST_GALLERY_PERMISSION) {
             if (grantResults.isNotEmpty() && ActivityCompat.checkSelfPermission(
@@ -245,7 +280,7 @@ class AddEpisodeFragment : Fragment() {
             ) {
                 pickPhotoFromGallery()
             } else {
-                createSnackbar(Constants.NO_PERMISSION_GALLERY)
+                createSnackbar(NO_PERMISSION_GALLERY)
             }
         }
     }
@@ -294,18 +329,39 @@ class AddEpisodeFragment : Fragment() {
 
     private fun picassoUpload(imageUri: Uri?, imageView: ImageView) {
         Picasso.with(requireContext()).load(imageUri)
-            .resize(Constants.PICTURE_WIDTH, Constants.PICTURE_HEIGHT)
+            .resize(PICTURE_WIDTH, PICTURE_HEIGHT)
             .placeholder(R.drawable.ic_camera)
             .into(imageView)
     }
 
 
     private fun save() {
+        mListener?.fragmentActive(false)
         viewModel.currentShow?.id?.let { viewModel.saveEpisode(it) }
         fragmentManager?.popBackStackImmediate()
-        //finish()
     }
 
+    private fun backButton() {
+        if (exit) {
+            mListener?.fragmentActive(false)
+            fragmentManager?.popBackStackImmediate()
+        } else {
+            mListener?.fragmentActive(false)
+            val alertDialog = AlertDialog.Builder(requireContext())
+            alertDialog.setTitle(Constants.BACK_BUTTON_TITLE)
+            alertDialog.setMessage(Constants.BACK_BUTTON_MESSAGE)
+            alertDialog.setPositiveButton("Yes") { _, _ ->
+                fragmentManager?.popBackStackImmediate()
+            }
+
+            alertDialog.setNegativeButton(
+                "No"
+            ) { dialog, _ -> dialog.cancel() }
+
+            alertDialog.create()
+            alertDialog.show()
+        }
+    }
 
     private fun setNumberPickerValues(numberPicker: NumberPicker, minimum: Int, maximum: Int, default: Int) {
         with(numberPicker) {

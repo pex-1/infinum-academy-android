@@ -45,6 +45,5 @@ class SharedDataViewModel : ViewModel(), Observer<List<Show>> {
         ShowsRepository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
     }
 
-    fun getShow(showId: Int) = _showsLiveData.value?.get(showId)
 
 }

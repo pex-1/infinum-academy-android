@@ -1,7 +1,6 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,10 +27,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //setSupportActionBar(toolbarEpisodes)
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        //supportActionBar?.setDisplayShowTitleEnabled(false)
 
 
         adapter = EpisodesAdapter(this)
@@ -69,13 +64,11 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
 
         addEpisodesClickableTextView.setOnClickListener {
-            //startActivity(AddEpisodeActivity.newInstance(this, id))
             openAddEpisodeFragment()
         }
 
 
         episodesFab.setOnClickListener {
-            //startActivity(AddEpisodeActivity.newInstance(this, id))
             openAddEpisodeFragment()
         }
     }
@@ -89,7 +82,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         }
         fragmentManager?.beginTransaction()?.apply {
             add(fragment, AddEpisodeFragment())
-            addToBackStack("add episodes")
+            addToBackStack("episode fragment")
             commit()
         }
     }

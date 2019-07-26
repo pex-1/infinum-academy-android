@@ -21,16 +21,6 @@ class Constants {
         const val REQUEST_CAMERA_PERMISSION = 7
         const val REQUEST_GALLERY_PERMISSION = 8
 
-        const val SEASON_MINIMUM = 0
-        const val SEASON_MAXIMUM = 20
-        const val EPISODE_MINIMUM = 0
-        const val EPISODE_MAXIMUM = 99
-        const val CAMERA_PERMISSION = "This app needs your permission to use the camera"
-        const val GALLERY_PERMISSION = "This app needs your permission to open gallery"
-        const val NO_PERMISSION_CAMERA = "Can't open camera without the permission!"
-        const val NO_PERMISSION_GALLERY = "Can't open gallery without the permission!"
-        const val PICTURE_WIDTH = 0
-        const val PICTURE_HEIGHT = 200
 
     }
 }

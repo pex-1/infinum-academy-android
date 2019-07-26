@@ -29,6 +29,7 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         adapter = ShowsAdapter(this)
         showsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         showsRecyclerView.adapter = adapter
@@ -49,13 +50,13 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
 
         if (resources.getBoolean(R.bool.tablet)){
             fragmentManager?.beginTransaction()?.apply {
-                add(R.id.episodesFrameLayout, EpisodesFragment())
+                replace(R.id.episodesFrameLayout, EpisodesFragment())
                 commit()
             }
         }else{
             fragmentManager?.beginTransaction()?.apply {
                 add(R.id.fragmentContainer, EpisodesFragment())
-                addToBackStack("episodes to back stack")
+                addToBackStack("show fragment")
                 commit()
             }
         }
