@@ -35,6 +35,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         Handler().postDelayed({
             startActivity(FragmentContainerActivity.newInstance(this))
+            finish()
         }, 3000)
     }
 }

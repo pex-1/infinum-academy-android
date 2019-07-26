@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Activity
 import android.app.Dialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -19,24 +18,22 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
+import infinum.academy2019.shows_danijel_pecek.ui.shared.BaseFragment
 import kotlinx.android.synthetic.main.dialog_layout.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
-import java.lang.ClassCastException
 
-class AddEpisodeFragment : Fragment() {
+class AddEpisodeFragment : BaseFragment() {
 
-    interface AddEpisodeFragmentInterface {
-        fun fragmentActive(state: Boolean)
+    override fun onBackButton(): Boolean {
+        return backButton()
     }
 
-    private var mListener: AddEpisodeFragmentInterface? = null
 
     private lateinit var viewModel: SharedDataViewModel
 
@@ -60,25 +57,6 @@ class AddEpisodeFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_add_episode, container, false)
     }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-
-        try {
-            mListener = context as (AddEpisodeFragmentInterface)
-        }catch (e: ClassCastException){
-            throw ClassCastException("${context.toString()} must implement listener" )
-        }
-
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        mListener?.fragmentActive(true)
-    }
-    override fun onStop() {
-        super.onStop()
-        mListener?.fragmentActive(true)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,9 +86,13 @@ class AddEpisodeFragment : Fragment() {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
 
+
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
 
+            titleEditText.setText(viewModel.titleInput)
+            descriptionEditText.setText(viewModel.descriptionInput)
+            exit = !(viewModel.titleInput.isNotEmpty() || viewModel.descriptionInput.isNotEmpty())
             pickSeasonEpisodeTextView.text = Utils.setSeasonString(viewModel.seasonDefault, viewModel.episodeDefault)
 
             pickSeasonEpisodeTextView.setOnClickListener {
@@ -336,21 +318,22 @@ class AddEpisodeFragment : Fragment() {
 
 
     private fun save() {
-        mListener?.fragmentActive(false)
         viewModel.currentShow?.id?.let { viewModel.saveEpisode(it) }
+        resetInputFields()
         fragmentManager?.popBackStackImmediate()
     }
 
-    private fun backButton() {
+    private fun backButton(): Boolean {
         if (exit) {
-            mListener?.fragmentActive(false)
+            resetInputFields()
             fragmentManager?.popBackStackImmediate()
+            return true
         } else {
-            mListener?.fragmentActive(false)
             val alertDialog = AlertDialog.Builder(requireContext())
             alertDialog.setTitle(Constants.BACK_BUTTON_TITLE)
             alertDialog.setMessage(Constants.BACK_BUTTON_MESSAGE)
             alertDialog.setPositiveButton("Yes") { _, _ ->
+                resetInputFields()
                 fragmentManager?.popBackStackImmediate()
             }
 
@@ -360,7 +343,13 @@ class AddEpisodeFragment : Fragment() {
 
             alertDialog.create()
             alertDialog.show()
+            return false
         }
+    }
+
+    private fun resetInputFields() {
+        viewModel.titleInput = ""
+        viewModel.descriptionInput = ""
     }
 
     private fun setNumberPickerValues(numberPicker: NumberPicker, minimum: Int, maximum: Int, default: Int) {

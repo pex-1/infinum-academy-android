@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.Show
+import infinum.academy2019.shows_danijel_pecek.ui.shared.BaseFragment
 
 import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsAdapter
 import kotlinx.android.synthetic.main.fragment_shows.*
@@ -45,18 +48,27 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
 
     }
 
+
     override fun onClick(show: Show) {
         viewModel.currentShow = show
+        val fragment = fragmentManager?.findFragmentByTag(Constants.ADD_EPISODE_TAG)
 
-        if (resources.getBoolean(R.bool.tablet)){
-            fragmentManager?.beginTransaction()?.apply {
-                replace(R.id.episodesFrameLayout, EpisodesFragment())
-                commit()
+        if (resources.getBoolean(R.bool.tablet)) {
+            if (fragment != null && (fragment is BaseFragment)) {
+                if(fragment.onBackButton()){
+                    fragmentManager?.popBackStackImmediate()
+                }
+            }else{
+                    fragmentManager?.beginTransaction()?.apply {
+                        replace(R.id.episodesFrameLayoutTablet, EpisodesFragment(), Constants.EPISODE_TAG)
+                        commit()
+                }
+
             }
-        }else{
+        } else {
             fragmentManager?.beginTransaction()?.apply {
-                add(R.id.fragmentContainer, EpisodesFragment())
-                addToBackStack("show fragment")
+                add(R.id.frameLayoutPhone, EpisodesFragment(), Constants.EPISODE_TAG)
+                addToBackStack(null)
                 commit()
             }
         }

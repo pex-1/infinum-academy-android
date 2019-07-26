@@ -21,6 +21,9 @@ class Constants {
         const val REQUEST_CAMERA_PERMISSION = 7
         const val REQUEST_GALLERY_PERMISSION = 8
 
+        const val ADD_EPISODE_TAG = "ADD_EPISODE_TAG"
+        const val EPISODE_TAG = "EPISODE_TAG"
+        const val SHOW_TAG = "SHOW_TAG"
 
     }
 }

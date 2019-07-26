@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import infinum.academy2019.shows_danijel_pecek.ui.episodes.EpisodesAdapter
@@ -27,7 +28,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
 
         adapter = EpisodesAdapter(this)
 
@@ -61,8 +61,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         }
 
 
-
-
         addEpisodesClickableTextView.setOnClickListener {
             openAddEpisodeFragment()
         }
@@ -73,16 +71,17 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         }
     }
 
+
     private fun openAddEpisodeFragment() {
 
         val fragment = if (resources.getBoolean(R.bool.tablet)) {
-            R.id.episodesFrameLayout
+            R.id.episodesFrameLayoutTablet
         } else {
-            R.id.fragmentContainer
+            R.id.frameLayoutPhone
         }
         fragmentManager?.beginTransaction()?.apply {
-            add(fragment, AddEpisodeFragment())
-            addToBackStack("episode fragment")
+            replace(fragment, AddEpisodeFragment(), Constants.ADD_EPISODE_TAG)
+            addToBackStack(null)
             commit()
         }
     }
