@@ -25,8 +25,13 @@ class ShowsAdapter(private val clickListener: OnShowClicked): RecyclerView.Adapt
             showTitleTextView.text = show.name
             showYearTextView.text = show.date
             showImageView.setImageResource(show.image)
-            rootView.setOnClickListener{clickListener.onClick(show)}
+            rootView.setOnClickListener{
+                clickListener.onClick(show)
+            }
+
         }
+
+
     }
 
     fun setData(shows: List<Show>){

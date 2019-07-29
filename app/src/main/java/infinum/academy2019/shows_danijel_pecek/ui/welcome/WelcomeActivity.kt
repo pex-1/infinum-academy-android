@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
+import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -34,7 +34,8 @@ class WelcomeActivity : AppCompatActivity() {
 
 
         Handler().postDelayed({
-            startActivity(ShowsActivity.newInstance(this))
+            startActivity(FragmentContainerActivity.newInstance(this))
+            finish()
         }, 3000)
     }
 }
