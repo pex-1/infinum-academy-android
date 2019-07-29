@@ -5,11 +5,17 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
-import infinum.academy2019.shows_danijel_pecek.data.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.EpisodeModel
 import infinum.academy2019.shows_danijel_pecek.data.model.Show
-import infinum.academy2019.shows_danijel_pecek.data.repository.ShowsRepository
+import infinum.academy2019.shows_danijel_pecek.data.model.ShowDetails
+import infinum.academy2019.shows_danijel_pecek.data.model.ShowModel
+import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 
-class SharedDataViewModel : ViewModel(), Observer<List<Show>> {
+class SharedDataViewModel : ViewModel(), Observer<List<ShowModel>> {
+
+    override fun onChanged(shows: List<ShowModel>?) {
+        _showsLiveData.value = shows?: listOf()
+    }
 
     var fileUri: Uri? = null
     var titleInput = ""
@@ -17,32 +23,44 @@ class SharedDataViewModel : ViewModel(), Observer<List<Show>> {
     var seasonDefault = 1
     var episodeDefault = 1
 
-    var currentShow: Show? = null
+    var currentShow: ShowModel? = null
 
 
-    private val _showsLiveData = MutableLiveData<List<Show>>()
-
-    val showsLiveData: LiveData<List<Show>>
+    private val _showsLiveData = MutableLiveData<List<ShowModel>>()
+    val showsLiveData: LiveData<List<ShowModel>>
         get() = _showsLiveData
 
+    private val _details = MutableLiveData<ShowDetails>()
+    val detailsLiveData: LiveData<ShowDetails>
+        get() = _details
 
-    private var showsList = listOf<Show>()
+    private val _episodesLiveData = MutableLiveData<List<EpisodeModel>>()
+    val episodesLiveData: LiveData<List<EpisodeModel>>
+        get() = _episodesLiveData
 
-    init {
-        _showsLiveData.value = showsList
-        ShowsRepository.getShows().observeForever(this)
+    fun getEpisode(showId: String){
+        Repository.getEpisodes(showId)
     }
 
-    override fun onChanged(shows: List<Show>?) {
-        _showsLiveData.value = shows?: listOf()     //nepotrebno?
+    fun getShowDetails(showId: String){
+        Repository.getShowDetails(showId)
+    }
+
+    init {
+        Repository.liveData().observeForever(this)
+    }
+
+
+    fun getShows(){
+        Repository.getShowsFromApi()
     }
 
     override fun onCleared() {
-        ShowsRepository.getShows().removeObserver(this)
+        Repository.liveData().removeObserver(this)
     }
 
     fun saveEpisode(showId: Int){
-        ShowsRepository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
+        //Repository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
     }
 
 

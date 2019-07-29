@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.Show
+import infinum.academy2019.shows_danijel_pecek.data.model.ShowModel
 import infinum.academy2019.shows_danijel_pecek.ui.shared.BaseFragment
 
 import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsAdapter
@@ -37,19 +39,26 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
         showsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         showsRecyclerView.adapter = adapter
 
+
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
             viewModel.showsLiveData.observe(this, Observer { shows ->
+                showsProgressBar.visibility = View.GONE
                 if (shows != null) {
                     adapter.setData(shows)
                 }
             })
         }
+        viewModel.getEpisode("1AoJoWJ5Hdx3nZ5t")
+        viewModel.getShows()
+        showsProgressBar.visibility = View.VISIBLE
 
     }
 
 
-    override fun onClick(show: Show) {
+    override fun onClick(show: ShowModel) {
+        viewModel.getShowDetails(show.showId)
+        viewModel.getEpisode(show.showId)
         viewModel.currentShow = show
         val fragment = fragmentManager?.findFragmentByTag(Constants.ADD_EPISODE_TAG)
 

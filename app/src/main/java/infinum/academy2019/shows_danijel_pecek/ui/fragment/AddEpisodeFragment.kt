@@ -310,7 +310,7 @@ class AddEpisodeFragment : BaseFragment() {
 
 
     private fun picassoUpload(imageUri: Uri?, imageView: ImageView) {
-        Picasso.with(requireContext()).load(imageUri)
+        Picasso.get().load(imageUri)
             .resize(PICTURE_WIDTH, PICTURE_HEIGHT)
             .placeholder(R.drawable.ic_camera)
             .into(imageView)
@@ -318,7 +318,7 @@ class AddEpisodeFragment : BaseFragment() {
 
 
     private fun save() {
-        viewModel.currentShow?.id?.let { viewModel.saveEpisode(it) }
+        //viewModel.currentShow?.id?.let { viewModel.saveEpisode(it) }
         resetInputFields()
         fragmentManager?.popBackStackImmediate()
     }

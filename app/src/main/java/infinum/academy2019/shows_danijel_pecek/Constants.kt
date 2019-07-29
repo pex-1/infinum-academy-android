@@ -25,5 +25,13 @@ class Constants {
         const val EPISODE_TAG = "EPISODE_TAG"
         const val SHOW_TAG = "SHOW_TAG"
 
+        const val USER_REGISTRATION_SUCCESSFUL = "Registration successful!"
+        const val USER_REGISTRATION_UNSUCCESSFUL = "Registration unsuccessful"
+
+        const val USER_LOGIN_SUCCESSFUL = "Login successful!"
+        const val USER_LOGIN_UNSUCCESSFUL = "Login unsuccessful"
+
+        const val IMAGE_BASE_URL = "https://api.infinum.academy"
+
     }
 }

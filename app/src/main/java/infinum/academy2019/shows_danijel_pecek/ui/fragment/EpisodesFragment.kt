@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.EpisodeModel
 import infinum.academy2019.shows_danijel_pecek.ui.episodes.EpisodesAdapter
 import kotlinx.android.synthetic.main.fragment_episodes.*
 
@@ -34,19 +35,16 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
 
+            viewModel.episodesLiveData.observe(this, Observer {episodes ->
+                if (episodes != null) {
 
-            viewModel.showsLiveData.observe(this, Observer {shows ->
-                if (shows != null) {
-                    val selectedShow = viewModel.currentShow ?: shows[0]
+                    adapter.setData(episodes)
 
+                    //showTitleTextViewFragment.text = selectedShow.title
 
-                    adapter.setData(selectedShow.episodeList)
+                    //showDescriptionTextView.text = selectedShow.description
 
-                    showTitleTextViewFragment.text = selectedShow.name
-
-                    showDescriptionTextView.text = selectedShow.description
-
-                    if (selectedShow.episodeList.isNotEmpty()) {
+                    if (episodes.isNotEmpty()) {
 
                         noShowsLinearLayout.visibility = View.GONE
                         episodesRecyclerView.visibility = View.VISIBLE
@@ -56,6 +54,17 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
                     } else {
 
                     }
+                }
+            })
+
+            viewModel.detailsLiveData.observe(this, Observer {details ->
+                if (details != null) {
+
+
+                    showTitleTextViewFragment.text = details.title
+
+                    showDescriptionTextView.text = details.description
+
                 }
             })
         }
@@ -86,7 +95,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         }
     }
 
-    override fun onClick(episode: Episode) {
+    override fun onClick(episode: EpisodeModel) {
         Toast.makeText(requireContext(),"episode clicked!",Toast.LENGTH_SHORT).show()
     }
 
