@@ -2,7 +2,6 @@ package infinum.academy2019.shows_danijel_pecek.ui.register
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -14,19 +13,15 @@ import androidx.lifecycle.ViewModelProviders
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.user.User
-import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
+import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
 import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
-import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_login.logInButton
-import kotlinx.android.synthetic.main.activity_login.passwordEditText
-import kotlinx.android.synthetic.main.activity_login.usernameEditText
 import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
 import kotlinx.android.synthetic.main.activity_register.*
 
 
 
 class RegisterActivity : AppCompatActivity() {
-    private lateinit var viewModel: RegisterViewModel
+    private lateinit var viewModel: LoginRegisterViewModel
 
     companion object{
         fun newInstance(context: Context)= Intent(context, RegisterActivity::class.java)
@@ -47,13 +42,13 @@ class RegisterActivity : AppCompatActivity() {
         setSupportActionBar(toolbarRegister)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
         viewModel.liveData.observe(this, Observer {
             registerProgressBar.visibility = View.GONE
             if(it == Constants.USER_REGISTRATION_SUCCESSFUL){
                 Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT).show()
                 startActivity(WelcomeActivity.newInstance(this, usernameEditTextRegister.text.toString().trim()))
-                finish()
+                finishAffinity()
             }else{
                 Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
             }
@@ -69,6 +64,7 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
+            //TODO: use of with
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 with(viewModel){
                     email = usernameEditTextRegister.text.toString().trim()

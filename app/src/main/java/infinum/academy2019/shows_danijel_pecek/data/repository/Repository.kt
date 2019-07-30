@@ -1,6 +1,5 @@
 package infinum.academy2019.shows_danijel_pecek.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import infinum.academy2019.shows_danijel_pecek.Constants
@@ -12,11 +11,22 @@ import infinum.academy2019.shows_danijel_pecek.data.model.user.UserLoginResponse
 import infinum.academy2019.shows_danijel_pecek.data.model.user.UserRegisterResponse
 import retrofit2.Call
 import retrofit2.Response
+import retrofit2.Callback
+
 
 object Repository {
 
     private val apiService = RetrofitClient.retrofitInstance?.create(Api::class.java)
 
+    private var loadingShowDetails: Boolean = false
+
+    private var loadingEpisodes: Boolean = false
+
+    fun isLoading() = loadingShowDetails && loadingEpisodes
+    fun loadingReset(){
+        loadingEpisodes = false
+        loadingShowDetails = false
+    }
 
     private val shows = MutableLiveData<List<ShowModel>>()
 
@@ -35,7 +45,7 @@ object Repository {
 
 
     fun registerUser(user: User){
-        apiService?.userRegister(user)?.enqueue(object : retrofit2.Callback<UserRegisterResponse>{
+        apiService?.userRegister(user)?.enqueue(object : Callback<UserRegisterResponse>{
 
             override fun onResponse(call: Call<UserRegisterResponse>, response: Response<UserRegisterResponse>) {
                 if(response.isSuccessful && response.body() != null){
@@ -51,7 +61,7 @@ object Repository {
     }
 
     fun loginUser(user: User){
-        apiService?.userLogin(user)?.enqueue(object : retrofit2.Callback<UserLoginResponse>{
+        apiService?.userLogin(user)?.enqueue(object : Callback<UserLoginResponse>{
 
             override fun onResponse(call: Call<UserLoginResponse>, response: Response<UserLoginResponse>) {
                 if(response.isSuccessful && response.body() != null){
@@ -69,7 +79,7 @@ object Repository {
 
 
     fun getShowsFromApi() {
-        apiService?.getShows()?.enqueue(object : retrofit2.Callback<ShowResponse> {
+        apiService?.getShows()?.enqueue(object : Callback<ShowResponse> {
 
             override fun onResponse(call: Call<ShowResponse>, response: Response<ShowResponse>) {
                 if (response.isSuccessful && response.body() != null) {
@@ -84,32 +94,32 @@ object Repository {
     }
 
     fun getEpisodes(id: String) {
-        apiService?.getEpisodes(id)?.enqueue(object : retrofit2.Callback<EpisodeResponse> {
+        apiService?.getEpisodes(id)?.enqueue(object : Callback<EpisodeResponse> {
 
             override fun onResponse(call: Call<EpisodeResponse>, response: Response<EpisodeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
-                    episodes.value = response.body()?.episodeList
-                    shows.value = shows.value
-                    Log.e("from repository", "${response.body()?.episodeList?.get(0)?.description}")
+                    loadingEpisodes = true
+                    episodes.postValue(response.body()?.episodeList)
                 }
             }
             override fun onFailure(call: Call<EpisodeResponse>, t: Throwable) {
+                loadingEpisodes = true
             }
         })
     }
 
 
     fun getShowDetails(id: String) {
-        apiService?.getShowDetails(id)?.enqueue(object : retrofit2.Callback<ShowDetailsResponse> {
+        apiService?.getShowDetails(id)?.enqueue(object : Callback<ShowDetailsResponse> {
 
             override fun onResponse(call: Call<ShowDetailsResponse>, response: Response<ShowDetailsResponse>) {
                 if (response.isSuccessful && response.body() != null) {
+                    loadingShowDetails = true
                     details.value = response.body()?.showDetails
-                    shows.value = shows.value
-                    Log.e("show details", response.body()?.showDetails.toString())
                 }
             }
             override fun onFailure(call: Call<ShowDetailsResponse>, t: Throwable) {
+                loadingEpisodes = true
             }
         })
     }

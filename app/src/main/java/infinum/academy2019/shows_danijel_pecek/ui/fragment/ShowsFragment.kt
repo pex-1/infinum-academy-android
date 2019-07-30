@@ -1,8 +1,6 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +10,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.data.model.Show
 import infinum.academy2019.shows_danijel_pecek.data.model.ShowModel
 import infinum.academy2019.shows_danijel_pecek.ui.shared.BaseFragment
 
@@ -49,7 +46,6 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
                 }
             })
         }
-        viewModel.getEpisode("1AoJoWJ5Hdx3nZ5t")
         viewModel.getShows()
         showsProgressBar.visibility = View.VISIBLE
 

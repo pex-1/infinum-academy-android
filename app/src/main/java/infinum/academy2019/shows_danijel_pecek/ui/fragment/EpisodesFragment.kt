@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,36 +36,35 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
 
-            viewModel.episodesLiveData.observe(this, Observer {episodes ->
+            if(!viewModel.isLoading()){
+                episodesProgressBar.visibility = View.VISIBLE
+            }
+            viewModel.episodesLiveData?.observe(this, Observer {episodes ->
                 if (episodes != null) {
 
                     adapter.setData(episodes)
 
-                    //showTitleTextViewFragment.text = selectedShow.title
-
-                    //showDescriptionTextView.text = selectedShow.description
 
                     if (episodes.isNotEmpty()) {
 
                         noShowsLinearLayout.visibility = View.GONE
                         episodesRecyclerView.visibility = View.VISIBLE
 
+                        //TODO: nested scrolling, fab
                         episodesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                         episodesRecyclerView.adapter = adapter
-                    } else {
-
                     }
                 }
+                hideProgressBar()
+
             })
 
-            viewModel.detailsLiveData.observe(this, Observer {details ->
+            viewModel.detailsLiveData?.observe(this, Observer {details ->
                 if (details != null) {
-
-
                     showTitleTextViewFragment.text = details.title
-
                     showDescriptionTextView.text = details.description
 
+                    hideProgressBar()
                 }
             })
         }
@@ -77,6 +77,13 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
         episodesFab.setOnClickListener {
             openAddEpisodeFragment()
+        }
+    }
+
+    private fun hideProgressBar() {
+        if (viewModel.isLoading()) {
+            episodesProgressBar.visibility = View.GONE
+            viewModel.loadingReset()
         }
     }
 

@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import infinum.academy2019.shows_danijel_pecek.data.model.EpisodeModel
-import infinum.academy2019.shows_danijel_pecek.data.model.Show
 import infinum.academy2019.shows_danijel_pecek.data.model.ShowDetails
 import infinum.academy2019.shows_danijel_pecek.data.model.ShowModel
 import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
@@ -25,26 +24,31 @@ class SharedDataViewModel : ViewModel(), Observer<List<ShowModel>> {
 
     var currentShow: ShowModel? = null
 
+    fun isLoading():Boolean = Repository.isLoading()
+
+    fun loadingReset(){
+        Repository.loadingReset()
+    }
 
     private val _showsLiveData = MutableLiveData<List<ShowModel>>()
     val showsLiveData: LiveData<List<ShowModel>>
         get() = _showsLiveData
 
-    private val _details = MutableLiveData<ShowDetails>()
-    val detailsLiveData: LiveData<ShowDetails>
-        get() = _details
-
-    private val _episodesLiveData = MutableLiveData<List<EpisodeModel>>()
-    val episodesLiveData: LiveData<List<EpisodeModel>>
-        get() = _episodesLiveData
-
-    fun getEpisode(showId: String){
-        Repository.getEpisodes(showId)
-    }
+    var detailsLiveData: LiveData<ShowDetails>? = null
 
     fun getShowDetails(showId: String){
         Repository.getShowDetails(showId)
+        detailsLiveData = Repository.liveDataDetails()
     }
+
+
+    var episodesLiveData: LiveData<List<EpisodeModel>>? = null
+
+    fun getEpisode(showId: String){
+        Repository.getEpisodes(showId)
+        episodesLiveData = Repository.liveDateEpisode()
+    }
+
 
     init {
         Repository.liveData().observeForever(this)
@@ -59,9 +63,9 @@ class SharedDataViewModel : ViewModel(), Observer<List<ShowModel>> {
         Repository.liveData().removeObserver(this)
     }
 
-    fun saveEpisode(showId: Int){
+    //fun saveEpisode(showId: Int){
         //Repository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
-    }
+    //}
 
 
 }

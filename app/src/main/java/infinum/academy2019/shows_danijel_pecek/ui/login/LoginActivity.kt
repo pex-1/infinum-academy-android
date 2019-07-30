@@ -16,16 +16,15 @@ import infinum.academy2019.shows_danijel_pecek.data.model.user.User
 import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
 import infinum.academy2019.shows_danijel_pecek.ui.register.RegisterActivity
-import infinum.academy2019.shows_danijel_pecek.ui.register.RegisterViewModel
+import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
 import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
-import kotlinx.android.synthetic.main.activity_register.*
 
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: RegisterViewModel
+    private lateinit var viewModel: LoginRegisterViewModel
 
     companion object{
         const val WARNING = "Please enter a valid email address"
@@ -45,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        viewModel = ViewModelProviders.of(this).get(RegisterViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
         viewModel.liveData.observe(this, Observer {
             loginProgressBar.visibility = View.GONE
             if(it == Constants.USER_LOGIN_SUCCESSFUL){
@@ -55,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
                     sharedPreferenceEditor.putBoolean(SKIP_LOGIN, true)
                     sharedPreferenceEditor.apply()
                     startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
-                    finish()
+                    finishAffinity()
                 }
             }else{
                 Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()

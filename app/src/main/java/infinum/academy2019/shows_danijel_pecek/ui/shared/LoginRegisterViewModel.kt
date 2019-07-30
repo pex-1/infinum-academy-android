@@ -1,4 +1,4 @@
-package infinum.academy2019.shows_danijel_pecek.ui.register
+package infinum.academy2019.shows_danijel_pecek.ui.shared
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import infinum.academy2019.shows_danijel_pecek.data.model.user.User
 import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 
-class RegisterViewModel : ViewModel(), Observer<String> {
+class LoginRegisterViewModel : ViewModel(), Observer<String> {
 
     var email = ""
     var password = ""
@@ -18,6 +18,7 @@ class RegisterViewModel : ViewModel(), Observer<String> {
 
     private val registrationSuccessful = MutableLiveData<String>()
 
+    //TODO: ViewModel observer vs activity observer
     init {
         Repository.registrationSuccessful().observeForever(this)
     }

@@ -28,7 +28,7 @@ class ShowsAdapter(private val clickListener: OnShowClicked): RecyclerView.Adapt
             showYearTextView.text = show.likesCount.toString()
             Picasso.get().load(show.getImage())
                 .resize(0, 100)
-                .placeholder(R.drawable.ic_camera)
+                .placeholder(R.drawable.placeholder)
                 .into(showImageView)
             rootView.setOnClickListener{
                 clickListener.onClick(show)

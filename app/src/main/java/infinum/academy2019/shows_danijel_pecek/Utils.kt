@@ -8,7 +8,7 @@ object Utils{
 
     fun setSeasonString(season: String, episode: String):String{
         return if(season.length>2 || episode.length>2){
-            "S01, E01"
+            "S 01, E 01"
         }else{
             "S ${season.padStart(2, '0')}, E ${episode.padStart(2, '0')}"
         }
