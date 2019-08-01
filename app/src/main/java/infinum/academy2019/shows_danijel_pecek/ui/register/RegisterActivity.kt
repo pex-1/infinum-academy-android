@@ -45,12 +45,12 @@ class RegisterActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
         viewModel.liveData.observe(this, Observer {
             registerProgressBar.visibility = View.GONE
-            if(it == Constants.USER_REGISTRATION_SUCCESSFUL){
+            if(it){
                 Toast.makeText(applicationContext, "Registration Successful!", Toast.LENGTH_SHORT).show()
                 startActivity(WelcomeActivity.newInstance(this, usernameEditTextRegister.text.toString().trim()))
                 finishAffinity()
             }else{
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Registration not successful!", Toast.LENGTH_SHORT).show()
             }
         })
 
@@ -64,7 +64,6 @@ class RegisterActivity : AppCompatActivity() {
 
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
-            //TODO: use of with
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 with(viewModel){
                     email = usernameEditTextRegister.text.toString().trim()

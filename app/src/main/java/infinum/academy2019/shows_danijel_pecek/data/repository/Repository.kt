@@ -1,5 +1,6 @@
 package infinum.academy2019.shows_danijel_pecek.data.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import infinum.academy2019.shows_danijel_pecek.Constants
@@ -23,14 +24,14 @@ object Repository {
     private var loadingEpisodes: Boolean = false
 
     fun isLoading() = loadingShowDetails && loadingEpisodes
-    fun loadingReset(){
-        loadingEpisodes = false
-        loadingShowDetails = false
-    }
+
 
     private val shows = MutableLiveData<List<ShowModel>>()
 
     fun liveData() : LiveData<List<ShowModel>> = shows
+
+    private val episodesProgressBar = MutableLiveData<Boolean>()
+    fun liveDataEpisodesProgressBar() : LiveData<Boolean> = episodesProgressBar
 
 
     private val episodes = MutableLiveData<List<EpisodeModel>>()
@@ -40,22 +41,17 @@ object Repository {
     fun liveDataDetails(): LiveData<ShowDetails> = details
 
 
-    private val userRegistrationSuccessful = MutableLiveData<String>()
-    fun registrationSuccessful(): LiveData<String> = userRegistrationSuccessful
+    private val userRegistrationSuccessful = MutableLiveData<Boolean>()
+    fun registrationSuccessful(): LiveData<Boolean> = userRegistrationSuccessful
 
 
     fun registerUser(user: User){
         apiService?.userRegister(user)?.enqueue(object : Callback<UserRegisterResponse>{
 
             override fun onResponse(call: Call<UserRegisterResponse>, response: Response<UserRegisterResponse>) {
-                if(response.isSuccessful && response.body() != null){
-                    userRegistrationSuccessful.value = Constants.USER_REGISTRATION_SUCCESSFUL
-                }else{
-                    userRegistrationSuccessful.value = Constants.USER_REGISTRATION_UNSUCCESSFUL
-                }
+                userRegistrationSuccessful.value = response.isSuccessful && response.body() != null
             }
             override fun onFailure(call: Call<UserRegisterResponse>, t: Throwable) {
-                userRegistrationSuccessful.value = t.localizedMessage
             }
         })
     }
@@ -64,15 +60,10 @@ object Repository {
         apiService?.userLogin(user)?.enqueue(object : Callback<UserLoginResponse>{
 
             override fun onResponse(call: Call<UserLoginResponse>, response: Response<UserLoginResponse>) {
-                if(response.isSuccessful && response.body() != null){
-                    userRegistrationSuccessful.value = Constants.USER_LOGIN_SUCCESSFUL
-                }else{
-                    userRegistrationSuccessful.value = Constants.USER_LOGIN_UNSUCCESSFUL
-                }
+                userRegistrationSuccessful.value = response.isSuccessful && response.body() != null
             }
 
             override fun onFailure(call: Call<UserLoginResponse>, t: Throwable) {
-                userRegistrationSuccessful.value = t.localizedMessage
             }
         })
     }
@@ -99,6 +90,9 @@ object Repository {
             override fun onResponse(call: Call<EpisodeResponse>, response: Response<EpisodeResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     loadingEpisodes = true
+                    if(isLoading()){
+                        episodesProgressBar.postValue(true)
+                    }
                     episodes.postValue(response.body()?.episodeList)
                 }
             }
@@ -115,6 +109,9 @@ object Repository {
             override fun onResponse(call: Call<ShowDetailsResponse>, response: Response<ShowDetailsResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     loadingShowDetails = true
+                    if(isLoading()){
+                        episodesProgressBar.postValue(true)
+                    }
                     details.value = response.body()?.showDetails
                 }
             }
@@ -122,6 +119,14 @@ object Repository {
                 loadingEpisodes = true
             }
         })
+    }
+
+    fun resetLiveData() {
+        episodes.value = null
+        details.value = null
+        episodesProgressBar.value = false
+        loadingEpisodes = false
+        loadingShowDetails = false
     }
 
 }

@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.data.model.Show
 import infinum.academy2019.shows_danijel_pecek.data.model.ShowModel
 import kotlinx.android.synthetic.main.item_show.view.*
 
@@ -27,7 +26,8 @@ class ShowsAdapter(private val clickListener: OnShowClicked): RecyclerView.Adapt
             showTitleTextView.text = show.title
             showYearTextView.text = show.likesCount.toString()
             Picasso.get().load(show.getImage())
-                .resize(0, 100)
+                .resize(200, 200)
+                .centerCrop()
                 .placeholder(R.drawable.placeholder)
                 .into(showImageView)
             rootView.setOnClickListener{

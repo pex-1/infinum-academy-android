@@ -15,7 +15,7 @@
         android:roundIcon="@drawable/ic_logo_mark"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.FragmentContainerActivity" />
+        <activity android:name=".ui.FragmentContainerActivity"/>
         <activity android:name=".ui.welcome.WelcomeActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.login.LoginActivity">

@@ -47,7 +47,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
         viewModel.liveData.observe(this, Observer {
             loginProgressBar.visibility = View.GONE
-            if(it == Constants.USER_LOGIN_SUCCESSFUL){
+            if(it){
                 Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_SHORT).show()
                 if (rememberMeCheckBox.isChecked) {
                     sharedPreferenceEditor = sharedPreferences.edit()
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
                     finishAffinity()
                 }
             }else{
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Login not successful!", Toast.LENGTH_SHORT).show()
             }
         })
         usernameEditText.setText(viewModel.loginEmail)

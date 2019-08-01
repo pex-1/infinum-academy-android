@@ -53,8 +53,9 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
 
 
     override fun onClick(show: ShowModel) {
-        viewModel.getShowDetails(show.showId)
+        viewModel.setProgressBar()
         viewModel.getEpisode(show.showId)
+        viewModel.getShowDetails(show.showId)
         viewModel.currentShow = show
         val fragment = fragmentManager?.findFragmentByTag(Constants.ADD_EPISODE_TAG)
 
