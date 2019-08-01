@@ -28,6 +28,11 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         return inflater.inflate(R.layout.fragment_episodes, container, false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.resetLiveData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -36,9 +41,14 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
 
-            if(!viewModel.isLoading()){
-                episodesProgressBar.visibility = View.VISIBLE
-            }
+            viewModel.progressBarLiveData?.observe(this, Observer { progressBar ->
+                if(progressBar){
+                    episodesProgressBar.visibility = View.GONE
+                }else{
+                    episodesProgressBar.visibility = View.VISIBLE
+                }
+            })
+
             viewModel.episodesLiveData?.observe(this, Observer {episodes ->
                 if (episodes != null) {
 
@@ -46,16 +56,13 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
 
                     if (episodes.isNotEmpty()) {
-
                         noShowsLinearLayout.visibility = View.GONE
                         episodesRecyclerView.visibility = View.VISIBLE
 
-                        //TODO: nested scrolling, fab
                         episodesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                         episodesRecyclerView.adapter = adapter
                     }
                 }
-                hideProgressBar()
 
             })
 
@@ -64,7 +71,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
                     showTitleTextViewFragment.text = details.title
                     showDescriptionTextView.text = details.description
 
-                    hideProgressBar()
                 }
             })
         }
@@ -77,13 +83,6 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
 
         episodesFab.setOnClickListener {
             openAddEpisodeFragment()
-        }
-    }
-
-    private fun hideProgressBar() {
-        if (viewModel.isLoading()) {
-            episodesProgressBar.visibility = View.GONE
-            viewModel.loadingReset()
         }
     }
 

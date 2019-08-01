@@ -24,11 +24,13 @@ class SharedDataViewModel : ViewModel(), Observer<List<ShowModel>> {
 
     var currentShow: ShowModel? = null
 
-    fun isLoading():Boolean = Repository.isLoading()
 
-    fun loadingReset(){
-        Repository.loadingReset()
+    var progressBarLiveData : LiveData<Boolean>? = null
+
+    fun setProgressBar(){
+        progressBarLiveData = Repository.liveDataEpisodesProgressBar()
     }
+
 
     private val _showsLiveData = MutableLiveData<List<ShowModel>>()
     val showsLiveData: LiveData<List<ShowModel>>
@@ -63,8 +65,12 @@ class SharedDataViewModel : ViewModel(), Observer<List<ShowModel>> {
         Repository.liveData().removeObserver(this)
     }
 
+    fun resetLiveData() {
+        Repository.resetLiveData()
+    }
+
     //fun saveEpisode(showId: Int){
-        //Repository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
+    //Repository.saveEpisodes(Episode(titleInput, descriptionInput, seasonDefault, episodeDefault, fileUri), showId)
     //}
 
 

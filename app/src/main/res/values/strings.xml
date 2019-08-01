@@ -28,4 +28,6 @@
     <string name="create_an_account">Create an account</string>
     <string name="password_again">Password again</string>
     <string name="register">Register</string>
+    <string name="shows_splash">shows</string>
+    <string name="splash_image_description">logo splash screen animation</string>
 </resources>

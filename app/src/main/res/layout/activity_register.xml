@@ -7,14 +7,14 @@
     tools:context=".ui.register.RegisterActivity">
 
     <ProgressBar
-        android:visibility="gone"
         android:id="@+id/registerProgressBar"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarRegister"
@@ -105,16 +105,11 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
+        style="@style/CustomButton"
         android:id="@+id/registerButton"
-        android:layout_width="328dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="@dimen/button_margin_horizontal"
         android:layout_marginTop="72dp"
-        android:layout_marginEnd="@dimen/button_margin_horizontal"
-        android:background="@drawable/button_round"
         android:enabled="false"
         android:text="@string/register"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/passwordRepeatLayout" />

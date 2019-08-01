@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.ui.login
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -27,6 +28,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginRegisterViewModel
 
     companion object{
+        fun newInstance(context: Context) = Intent(context, LoginActivity::class.java)
+
         const val WARNING = "Please enter a valid email address"
         const val SKIP_LOGIN = "SKIP_LOGIN"
     }
@@ -47,7 +50,7 @@ class LoginActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
         viewModel.liveData.observe(this, Observer {
             loginProgressBar.visibility = View.GONE
-            if(it == Constants.USER_LOGIN_SUCCESSFUL){
+            if(it){
                 Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_SHORT).show()
                 if (rememberMeCheckBox.isChecked) {
                     sharedPreferenceEditor = sharedPreferences.edit()
@@ -57,7 +60,7 @@ class LoginActivity : AppCompatActivity() {
                     finishAffinity()
                 }
             }else{
-                Toast.makeText(applicationContext, it, Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Login not successful!", Toast.LENGTH_SHORT).show()
             }
         })
         usernameEditText.setText(viewModel.loginEmail)

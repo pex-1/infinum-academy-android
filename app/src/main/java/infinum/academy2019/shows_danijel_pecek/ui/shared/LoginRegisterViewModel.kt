@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import infinum.academy2019.shows_danijel_pecek.data.model.user.User
 import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 
-class LoginRegisterViewModel : ViewModel(), Observer<String> {
+class LoginRegisterViewModel : ViewModel(), Observer<Boolean> {
 
     var email = ""
     var password = ""
@@ -16,19 +16,18 @@ class LoginRegisterViewModel : ViewModel(), Observer<String> {
     var loginEmail = ""
     var loginPassword = ""
 
-    private val registrationSuccessful = MutableLiveData<String>()
+    private val registrationSuccessful = MutableLiveData<Boolean>()
 
-    //TODO: ViewModel observer vs activity observer
     init {
         Repository.registrationSuccessful().observeForever(this)
     }
 
-    val liveData: LiveData<String>
+    val liveData: LiveData<Boolean>
         get() {
             return registrationSuccessful
         }
 
-    override fun onChanged(registration: String?) {
+    override fun onChanged(registration: Boolean?) {
         registrationSuccessful.value = registration
     }
 

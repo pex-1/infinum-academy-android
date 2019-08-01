@@ -40,8 +40,8 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
             viewModel.showsLiveData.observe(this, Observer { shows ->
-                showsProgressBar.visibility = View.GONE
                 if (shows != null) {
+                    showsProgressBar.visibility = View.GONE
                     adapter.setData(shows)
                 }
             })
@@ -53,8 +53,9 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
 
 
     override fun onClick(show: ShowModel) {
-        viewModel.getShowDetails(show.showId)
+        viewModel.setProgressBar()
         viewModel.getEpisode(show.showId)
+        viewModel.getShowDetails(show.showId)
         viewModel.currentShow = show
         val fragment = fragmentManager?.findFragmentByTag(Constants.ADD_EPISODE_TAG)
 
@@ -64,9 +65,9 @@ class ShowsFragment : Fragment(), ShowsAdapter.OnShowClicked {
                     fragmentManager?.popBackStackImmediate()
                 }
             }else{
-                    fragmentManager?.beginTransaction()?.apply {
-                        replace(R.id.episodesFrameLayoutTablet, EpisodesFragment(), Constants.EPISODE_TAG)
-                        commit()
+                fragmentManager?.beginTransaction()?.apply {
+                    replace(R.id.episodesFrameLayoutTablet, EpisodesFragment(), Constants.EPISODE_TAG)
+                    commit()
                 }
 
             }
