@@ -6,15 +6,30 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
+import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
+import infinum.academy2019.shows_danijel_pecek.data.model.user.User
+import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
+import infinum.academy2019.shows_danijel_pecek.ui.register.RegisterActivity
+import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
 import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
 
-const val WARNING = "Please enter a valid email address"
-const val SKIP_LOGIN = "SKIP_LOGIN"
 
 class LoginActivity : AppCompatActivity() {
+
+    private lateinit var viewModel: LoginRegisterViewModel
+
+    companion object{
+        const val WARNING = "Please enter a valid email address"
+        const val SKIP_LOGIN = "SKIP_LOGIN"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,6 +44,24 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
+        viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
+        viewModel.liveData.observe(this, Observer {
+            loginProgressBar.visibility = View.GONE
+            if(it){
+                Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_SHORT).show()
+                if (rememberMeCheckBox.isChecked) {
+                    sharedPreferenceEditor = sharedPreferences.edit()
+                    sharedPreferenceEditor.putBoolean(SKIP_LOGIN, true)
+                    sharedPreferenceEditor.apply()
+                    startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
+                    finishAffinity()
+                }
+            }else{
+                Toast.makeText(applicationContext, "Login not successful!", Toast.LENGTH_SHORT).show()
+            }
+        })
+        usernameEditText.setText(viewModel.loginEmail)
+        passwordEditText.setText(viewModel.loginPassword)
 
         val textWatcher: TextWatcher = object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
@@ -36,27 +69,25 @@ class LoginActivity : AppCompatActivity() {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val usernameInput = usernameEditText.text.toString().trim()
-                val passwordInput = passwordEditText.text.toString().trim()
+                with(viewModel){
+                    loginEmail = usernameEditText.text.toString().trim()
+                    loginPassword = passwordEditText.text.toString().trim()
 
-                logInButton.isEnabled = usernameInput.isNotEmpty() && passwordInput.isNotEmpty() && passwordInput.length > 7 && emailValid(usernameInput)
+                    logInButton.isEnabled = loginEmail.isNotEmpty() && loginPassword.isNotEmpty() && loginPassword.length > 7 && emailValid(loginEmail)
+                }
+
             }
         }
         usernameEditText.addTextChangedListener(textWatcher)
         passwordEditText.addTextChangedListener(textWatcher)
 
+        registerTextView.setOnClickListener {
+            startActivity(RegisterActivity.newInstance(this))
+        }
 
         logInButton.setOnClickListener {
-            if (rememberMeCheckBox.isChecked) {
-                sharedPreferenceEditor = sharedPreferences.edit()
-                sharedPreferenceEditor.putBoolean(SKIP_LOGIN, true)
-                sharedPreferenceEditor.apply()
-            }
-
-            startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
-            finish()
-
-
+            loginProgressBar.visibility = View.VISIBLE
+            Repository.loginUser(User(usernameEditText.text.toString(), passwordEditText.text.toString()))
         }
     }
 

@@ -1,6 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.data.model.Episode
+import infinum.academy2019.shows_danijel_pecek.data.model.EpisodeModel
 import infinum.academy2019.shows_danijel_pecek.ui.episodes.EpisodesAdapter
 import kotlinx.android.synthetic.main.fragment_episodes.*
 
@@ -26,6 +27,11 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         return inflater.inflate(R.layout.fragment_episodes, container, false)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.resetLiveData()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -34,28 +40,36 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         activity?.let {
             viewModel = ViewModelProviders.of(it).get(SharedDataViewModel::class.java)
 
+            viewModel.progressBarLiveData?.observe(this, Observer { progressBar ->
+                if(progressBar){
+                    episodesProgressBar.visibility = View.GONE
+                }else{
+                    episodesProgressBar.visibility = View.VISIBLE
+                }
+            })
 
-            viewModel.showsLiveData.observe(this, Observer {shows ->
-                if (shows != null) {
-                    val selectedShow = viewModel.currentShow ?: shows[0]
+            viewModel.episodesLiveData?.observe(this, Observer {episodes ->
+                if (episodes != null) {
+
+                    adapter.setData(episodes)
 
 
-                    adapter.setData(selectedShow.episodeList)
-
-                    showTitleTextViewFragment.text = selectedShow.name
-
-                    showDescriptionTextView.text = selectedShow.description
-
-                    if (selectedShow.episodeList.isNotEmpty()) {
-
+                    if (episodes.isNotEmpty()) {
                         noShowsLinearLayout.visibility = View.GONE
                         episodesRecyclerView.visibility = View.VISIBLE
 
                         episodesRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                         episodesRecyclerView.adapter = adapter
-                    } else {
-
                     }
+                }
+
+            })
+
+            viewModel.detailsLiveData?.observe(this, Observer {details ->
+                if (details != null) {
+                    showTitleTextViewFragment.text = details.title
+                    showDescriptionTextView.text = details.description
+
                 }
             })
         }
@@ -86,7 +100,7 @@ class EpisodesFragment : Fragment(), EpisodesAdapter.OnEpisodeClicked {
         }
     }
 
-    override fun onClick(episode: Episode) {
+    override fun onClick(episode: EpisodeModel) {
         Toast.makeText(requireContext(),"episode clicked!",Toast.LENGTH_SHORT).show()
     }
 
