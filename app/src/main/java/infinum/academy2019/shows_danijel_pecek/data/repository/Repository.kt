@@ -1,9 +1,7 @@
 package infinum.academy2019.shows_danijel_pecek.data.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.data.Api
 import infinum.academy2019.shows_danijel_pecek.data.RetrofitClient
 import infinum.academy2019.shows_danijel_pecek.data.model.*
@@ -27,7 +25,6 @@ object Repository {
 
 
     private val shows = MutableLiveData<List<ShowModel>>()
-
     fun liveData() : LiveData<List<ShowModel>> = shows
 
     private val episodesProgressBar = MutableLiveData<Boolean>()
@@ -68,7 +65,6 @@ object Repository {
         })
     }
 
-
     fun getShowsFromApi() {
         apiService?.getShows()?.enqueue(object : Callback<ShowResponse> {
 
@@ -105,7 +101,6 @@ object Repository {
 
     fun getShowDetails(id: String) {
         apiService?.getShowDetails(id)?.enqueue(object : Callback<ShowDetailsResponse> {
-
             override fun onResponse(call: Call<ShowDetailsResponse>, response: Response<ShowDetailsResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     loadingShowDetails = true

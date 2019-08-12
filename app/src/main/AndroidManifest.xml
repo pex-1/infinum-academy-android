@@ -7,7 +7,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,16 +14,20 @@
         android:roundIcon="@drawable/ic_logo_mark"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.FragmentContainerActivity"/>
-        <activity android:name=".ui.welcome.WelcomeActivity" />
-        <activity android:name=".ui.register.RegisterActivity" />
-        <activity android:name=".ui.login.LoginActivity">
+        <activity
+            android:name=".ui.splash.SplashActivity"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ui.FragmentContainerActivity" />
+        <activity android:name=".ui.welcome.WelcomeActivity" />
+        <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.login.LoginActivity" />
+
     </application>
 
 </manifest>
