@@ -6,15 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.register.RegisterActivity">
 
-    <ProgressBar
+    <androidx.cardview.widget.CardView
         android:id="@+id/registerProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        style="@style/cardViewLoading"
+        tools:ignore="MissingConstraints">
+
+        <infinum.academy2019.shows_danijel_pecek.ProgressBarView
+            android:layout_width="@dimen/progress_bar_size"
+            android:layout_height="@dimen/progress_bar_size"
+            android:layout_gravity="center" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarRegister"
@@ -30,9 +31,9 @@
         android:id="@+id/usernameInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/spacing_1x"
         android:layout_marginTop="13dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/spacing_1x"
         app:errorEnabled="true"
         app:errorTextAppearance="@style/warning_style"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/username"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_input_size"
             android:theme="@style/EditTextTheme" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -54,8 +55,8 @@
         android:id="@+id/passwordInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_input_horizontal_margin"
-        android:layout_marginEnd="@dimen/text_input_horizontal_margin"
+        android:layout_marginStart="@dimen/spacing_1x"
+        android:layout_marginEnd="@dimen/spacing_1x"
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,11 +68,11 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditTextRegister"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/text_input_height"
             android:layout_marginTop="40dp"
             android:inputType="textPassword"
             android:paddingBottom="15dp"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_input_size"
             android:theme="@style/EditTextTheme" />
 
 
@@ -81,8 +82,8 @@
         android:id="@+id/passwordRepeatLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/text_input_horizontal_margin"
-        android:layout_marginEnd="@dimen/text_input_horizontal_margin"
+        android:layout_marginStart="@dimen/spacing_1x"
+        android:layout_marginEnd="@dimen/spacing_1x"
         android:hint="@string/password_again"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,11 +95,11 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/repeatPasswordEditTextRegister"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_height="@dimen/text_input_height"
             android:layout_marginTop="40dp"
             android:inputType="textPassword"
             android:paddingBottom="15dp"
-            android:textSize="16sp"
+            android:textSize="@dimen/text_input_size"
             android:theme="@style/EditTextTheme" />
 
 

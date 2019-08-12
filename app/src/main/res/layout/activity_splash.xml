@@ -9,8 +9,8 @@
     <ImageView
         android:contentDescription="@string/splash_image_description"
         android:id="@+id/iconAnimation"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="@dimen/logo_size"
+        android:layout_height="@dimen/logo_size"
         android:layout_marginBottom="100dp"
         android:translationY="-500dp"
         android:src="@drawable/ic_logo_mark"

@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.ImageView
 import android.widget.NumberPicker
@@ -25,6 +26,7 @@ import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.ui.shared.BaseFragment
+import infinum.academy2019.shows_danijel_pecek.ui.shared.onTextChange
 import kotlinx.android.synthetic.main.dialog_layout.*
 import kotlinx.android.synthetic.main.fragment_add_episode.*
 
@@ -71,6 +73,9 @@ class AddEpisodeFragment : BaseFragment() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item?.itemId == android.R.id.home) {
             backButton()
+        }
+        else if(item?.itemId == R.id.settings){
+            Log.e("settings", "working")
         }
 
         return super.onOptionsItemSelected(item)
@@ -128,40 +133,35 @@ class AddEpisodeFragment : BaseFragment() {
         uploadPhotoLinearLayout.setOnClickListener { showPictureDialog() }
 
 
-        val textWatcher: TextWatcher = object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
+        titleEditText.onTextChange { onTextChangeValidation() }
+        descriptionEditText.onTextChange { onTextChangeValidation() }
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.titleInput = titleEditText.text.toString().trim()
-                viewModel.descriptionInput = descriptionEditText.text.toString().trim()
-
-                exit = !(viewModel.titleInput.isNotEmpty() || viewModel.descriptionInput.isNotEmpty())
-
-                if (viewModel.titleInput.isNotEmpty() && viewModel.descriptionInput.isNotEmpty()) {
-                    episodeDescriptionInputLayout.error = null
-                    usernameInputLayout.error = null
-                    saveButton.isEnabled = true
-                } else if (viewModel.titleInput.isEmpty()) {
-                    episodeDescriptionInputLayout.error = null
-                    usernameInputLayout.error = Constants.TITLE_EMPTY_WARNING
-                    saveButton.isEnabled = false
-                } else {
-                    usernameInputLayout.error = null
-                    episodeDescriptionInputLayout.error = Constants.DESCRIPTION_EMPTY_WARNING
-                }
-
-            }
-        }
-        titleEditText.addTextChangedListener(textWatcher)
-        descriptionEditText.addTextChangedListener(textWatcher)
         picassoUpload(viewModel.fileUri, uploadPhotoImageView)
 
         saveButton.setOnClickListener {
             save()
         }
 
+    }
+
+    private fun onTextChangeValidation() {
+        viewModel.titleInput = titleEditText.text.toString().trim()
+        viewModel.descriptionInput = descriptionEditText.text.toString().trim()
+
+        exit = !(viewModel.titleInput.isNotEmpty() || viewModel.descriptionInput.isNotEmpty())
+
+        if (viewModel.titleInput.isNotEmpty() && viewModel.descriptionInput.isNotEmpty()) {
+            episodeDescriptionInputLayout.error = null
+            usernameInputLayout.error = null
+            saveButton.isEnabled = true
+        } else if (viewModel.titleInput.isEmpty()) {
+            episodeDescriptionInputLayout.error = null
+            usernameInputLayout.error = Constants.TITLE_EMPTY_WARNING
+            saveButton.isEnabled = false
+        } else {
+            usernameInputLayout.error = null
+            episodeDescriptionInputLayout.error = Constants.DESCRIPTION_EMPTY_WARNING
+        }
     }
 
     private fun setNumberPicker(dialog: Dialog) {

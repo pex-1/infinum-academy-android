@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -18,6 +19,7 @@ import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
 import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
 import infinum.academy2019.shows_danijel_pecek.ui.register.RegisterActivity
 import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
+import infinum.academy2019.shows_danijel_pecek.ui.shared.onTextChange
 import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
@@ -66,23 +68,14 @@ class LoginActivity : AppCompatActivity() {
         usernameEditText.setText(viewModel.loginEmail)
         passwordEditText.setText(viewModel.loginPassword)
 
-        val textWatcher: TextWatcher = object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
 
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                with(viewModel){
-                    loginEmail = usernameEditText.text.toString().trim()
-                    loginPassword = passwordEditText.text.toString().trim()
-
-                    logInButton.isEnabled = loginEmail.isNotEmpty() && loginPassword.isNotEmpty() && loginPassword.length > 7 && emailValid(loginEmail)
-                }
-
-            }
+        usernameEditText.onTextChange {
+            textChangeValidation()
         }
-        usernameEditText.addTextChangedListener(textWatcher)
-        passwordEditText.addTextChangedListener(textWatcher)
+        passwordEditText.onTextChange {
+            textChangeValidation()
+        }
+
 
         registerTextView.setOnClickListener {
             startActivity(RegisterActivity.newInstance(this))
@@ -93,6 +86,19 @@ class LoginActivity : AppCompatActivity() {
             Repository.loginUser(User(usernameEditText.text.toString(), passwordEditText.text.toString()))
         }
     }
+
+    private fun textChangeValidation() {
+        with(viewModel) {
+            loginEmail = usernameEditText.text.toString().trim()
+            loginPassword = passwordEditText.text.toString().trim()
+
+            logInButton.isEnabled =
+                loginEmail.isNotEmpty() && loginPassword.isNotEmpty() && loginPassword.length > 5 && emailValid(
+                    loginEmail
+                )
+        }
+    }
+
 
     fun emailValid(email: String): Boolean {
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {

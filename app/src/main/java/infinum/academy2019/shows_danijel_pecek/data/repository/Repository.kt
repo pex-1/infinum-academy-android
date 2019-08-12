@@ -25,7 +25,6 @@ object Repository {
 
 
     private val shows = MutableLiveData<List<ShowModel>>()
-
     fun liveData() : LiveData<List<ShowModel>> = shows
 
     private val episodesProgressBar = MutableLiveData<Boolean>()
@@ -66,7 +65,6 @@ object Repository {
         })
     }
 
-
     fun getShowsFromApi() {
         apiService?.getShows()?.enqueue(object : Callback<ShowResponse> {
 
@@ -103,7 +101,6 @@ object Repository {
 
     fun getShowDetails(id: String) {
         apiService?.getShowDetails(id)?.enqueue(object : Callback<ShowDetailsResponse> {
-
             override fun onResponse(call: Call<ShowDetailsResponse>, response: Response<ShowDetailsResponse>) {
                 if (response.isSuccessful && response.body() != null) {
                     loadingShowDetails = true

@@ -10,15 +10,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
 import infinum.academy2019.shows_danijel_pecek.data.model.user.User
 import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
+import infinum.academy2019.shows_danijel_pecek.ui.shared.onTextChange
 import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
 import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
 import kotlinx.android.synthetic.main.activity_register.*
 
 
+private const val passwordLength = 5
 
 class RegisterActivity : AppCompatActivity() {
     private lateinit var viewModel: LoginRegisterViewModel
@@ -34,6 +35,8 @@ class RegisterActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,30 +62,28 @@ class RegisterActivity : AppCompatActivity() {
         repeatPasswordEditTextRegister.setText(viewModel.passwordRepeat)
 
 
-        val textWatcher: TextWatcher = object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                with(viewModel){
-                    email = usernameEditTextRegister.text.toString().trim()
-                    password = passwordEditTextRegister.text.toString().trim()
-                    passwordRepeat = repeatPasswordEditTextRegister.text.toString().trim()
-
-                    registerButton.isEnabled = email.isNotEmpty() && password.isNotEmpty() && password.length > 7 && emailValid(email) && passwordsMatch(password, passwordRepeat)
-                }
-
-            }
-        }
-        usernameEditTextRegister.addTextChangedListener(textWatcher)
-        passwordEditTextRegister.addTextChangedListener(textWatcher)
-        repeatPasswordEditTextRegister.addTextChangedListener(textWatcher)
+        usernameEditTextRegister.onTextChange { textChangeValidation() }
+        passwordEditTextRegister.onTextChange { textChangeValidation() }
+        repeatPasswordEditTextRegister.onTextChange { textChangeValidation() }
 
 
         registerButton.setOnClickListener {
             registerProgressBar.visibility = View.VISIBLE
             viewModel.registerUser(User(usernameEditTextRegister.text.toString(), passwordEditTextRegister.text.toString()))
+        }
+    }
+
+    private fun textChangeValidation() {
+        with(viewModel) {
+            email = usernameEditTextRegister.text.toString().trim()
+            password = passwordEditTextRegister.text.toString().trim()
+            passwordRepeat = repeatPasswordEditTextRegister.text.toString().trim()
+
+            registerButton.isEnabled =
+                email.isNotEmpty() && password.isNotEmpty() && password.length > passwordLength && emailValid(email) && passwordsMatch(
+                    password,
+                    passwordRepeat
+                )
         }
     }
 

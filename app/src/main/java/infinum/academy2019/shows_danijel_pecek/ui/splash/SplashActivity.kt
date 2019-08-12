@@ -14,13 +14,19 @@ import infinum.academy2019.shows_danijel_pecek.ui.login.LoginActivity.Companion.
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
+    var cancelNavigation = false
+
+    override fun onPause() {
+        super.onPause()
+        cancelNavigation = true
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        cancelNavigation = false
 
         val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-
 
 
             iconAnimation.doOnLayout {
@@ -36,17 +42,27 @@ class SplashActivity : AppCompatActivity() {
                     .setInterpolator(OvershootInterpolator())
                     .setStartDelay(1300)
                     .setDuration(500)
+                    .withEndAction {
+                        Handler().postDelayed({
+                            if(!cancelNavigation){
+                                if (sharedPreferences.getBoolean(SKIP_LOGIN, false)) {
+                                    startActivity(FragmentContainerActivity.newInstance(this))
+                                    finish()
+                                } else {
+                                    startActivity(LoginActivity.newInstance(this))
+                                }
+                            }
+
+                        }, 2000)
+                    }
                     .start()
             }
 
-        Handler().postDelayed({
-            if (sharedPreferences.getBoolean(SKIP_LOGIN, false)) {
-                startActivity(FragmentContainerActivity.newInstance(this))
-                finish()
-            } else {
-                startActivity(LoginActivity.newInstance(this))
-            }
-        }, 3800)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+
     }
 
 
