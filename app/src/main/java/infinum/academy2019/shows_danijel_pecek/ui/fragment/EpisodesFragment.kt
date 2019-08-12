@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.data.model.Episode
 import infinum.academy2019.shows_danijel_pecek.data.model.EpisodeModel
 import infinum.academy2019.shows_danijel_pecek.ui.episodes.EpisodesAdapter
 import kotlinx.android.synthetic.main.fragment_episodes.*

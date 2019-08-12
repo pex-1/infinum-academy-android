@@ -8,12 +8,16 @@ data class EpisodeModel(
     @Json(name = "_id")
     val showId: String,
 
+    @Json(name = "title")
     val title: String,
 
+    @Json(name = "description")
     val description: String,
 
+    @Json(name = "imageUrl")
     val imageUrl: String,
 
+    @Json(name = "episodeNumber")
     val episodeNumber: String,
 
     @Json(name = "season")
