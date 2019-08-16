@@ -57,7 +57,7 @@
             android:id="@+id/addEpisodesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
+            android:layout_marginTop="@dimen/spacing_2x"
             android:text="@string/asleep"
             android:textAlignment="center"
             android:textColor="@color/subtitle_text"
