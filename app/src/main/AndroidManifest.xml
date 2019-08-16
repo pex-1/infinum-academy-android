@@ -24,9 +24,7 @@
         <activity
             android:name=".ui.episodes.EpisodeActivity"
             android:theme="@style/AppTheme.NoActionAndStatusBar" />
-        <activity android:name=".ui.shows.ShowsActivity">
-
-        </activity>
+        <activity android:name=".ui.shows.ShowsActivity"/>
         <activity
             android:name=".ui.splash.SplashActivity"
             android:noHistory="true">
