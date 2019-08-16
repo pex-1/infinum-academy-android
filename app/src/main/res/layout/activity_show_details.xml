@@ -61,7 +61,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbarEpisodes"
                 android:layout_width="match_parent"
-                android:layout_height="82dp"
+                android:layout_height="@dimen/collapsing_toolbar_height"
                 android:background="@drawable/gradient_header"
                 android:paddingTop="@dimen/spacing_3x"
                 app:layout_collapseMode="pin" />
@@ -84,9 +84,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginEnd="24dp"
-                    android:textColor="#de000000"
+                    android:layout_marginStart="@dimen/spacing_3x"
+                    android:layout_marginEnd="@dimen/spacing_3x"
+                    android:textColor="@color/counter_color"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
