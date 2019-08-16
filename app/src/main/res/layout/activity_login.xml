@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:id="@+id/loginConstraintLayoutSnackbarl"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:maxWidth="@dimen/max_width"
     tools:context=".ui.login.LoginActivity">
 
 

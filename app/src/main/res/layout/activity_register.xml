@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:maxWidth="@dimen/max_width"
+    android:layout_gravity="center"
     android:id="@+id/registerCoordinatorLayoutSnackbar"
     tools:context=".ui.register.RegisterActivity">
 

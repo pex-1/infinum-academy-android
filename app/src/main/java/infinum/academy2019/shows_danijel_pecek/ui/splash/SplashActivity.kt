@@ -25,7 +25,7 @@ class SplashActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         cancelNavigation = false
 
-        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
+        val sharedPreferences =  getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE)
 
 
             iconAnimation.doOnLayout {
