@@ -9,10 +9,13 @@ data class ShowModel(
     @Json(name = "_id")
     val showId: String,
 
+    @Json(name = "title")
     val title: String,
 
+    @Json(name = "imageUrl")
     val imageUrl: String,
 
+    @Json(name = "likesCount")
     val likesCount: Int,
 
     @Transient

@@ -2,11 +2,14 @@ package infinum.academy2019.shows_danijel_pecek.ui.welcome
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
+import infinum.academy2019.shows_danijel_pecek.Utils
+import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
 import kotlinx.android.synthetic.main.activity_welcome.*
 
 
@@ -21,7 +24,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         fun newInstance(context: Context, username: String): Intent {
             val intent = Intent(context, WelcomeActivity::class.java)
-            intent.putExtra(USERNAME, username.split("@")[0])
+            intent.putExtra(USERNAME, Utils.getUserName(username))
             return intent
         }
     }
@@ -31,17 +34,30 @@ class WelcomeActivity : AppCompatActivity() {
         cancelNavigation = false
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
         cancelNavigation = true
 
-        welcomeTextView.text = "Welcome ${intent.getStringExtra(USERNAME)}"
+        val name = intent.getStringExtra(USERNAME)
 
+        welcomeTextView.text = "Welcome $name"
+
+        val sharedPreferences =  getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor
+
+        editor = sharedPreferences.edit()
+        editor.putString(Constants.USER_NAME, name)
+        editor.apply()
 
         Handler().postDelayed({
             if(cancelNavigation){
-                startActivity(FragmentContainerActivity.newInstance(this))
+                startActivity(ShowsActivity.newInstance(this))
                 finish()
             }
         }, 3000)

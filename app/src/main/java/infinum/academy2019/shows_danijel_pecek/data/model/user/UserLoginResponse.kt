@@ -11,5 +11,6 @@ data class UserLoginResponse(
 
 @JsonClass(generateAdapter = true)
 data class UserLogin(
+    @Json(name = "token")
     val token: String
 )

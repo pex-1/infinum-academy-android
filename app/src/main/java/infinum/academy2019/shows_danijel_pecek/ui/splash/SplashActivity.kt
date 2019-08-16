@@ -1,16 +1,15 @@
 package infinum.academy2019.shows_danijel_pecek.ui.splash
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.animation.*
 import androidx.core.view.doOnLayout
+import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
-import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
 import infinum.academy2019.shows_danijel_pecek.ui.login.LoginActivity
-import infinum.academy2019.shows_danijel_pecek.ui.login.LoginActivity.Companion.SKIP_LOGIN
+import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class SplashActivity : AppCompatActivity() {
@@ -45,8 +44,8 @@ class SplashActivity : AppCompatActivity() {
                     .withEndAction {
                         Handler().postDelayed({
                             if(!cancelNavigation){
-                                if (sharedPreferences.getBoolean(SKIP_LOGIN, false)) {
-                                    startActivity(FragmentContainerActivity.newInstance(this))
+                                if (sharedPreferences.getBoolean(Constants.SKIP_LOGIN, false)) {
+                                    startActivity(ShowsActivity.newInstance(this))
                                     finish()
                                 } else {
                                     startActivity(LoginActivity.newInstance(this))

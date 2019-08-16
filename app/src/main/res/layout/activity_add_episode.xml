@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true"
+    android:maxWidth="@dimen/max_width"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/snackbarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:context=".ui.add_episode.AddEpisodeActivity">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/addEpisodeProgressBar"
+                style="@style/cardViewLoading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <infinum.academy2019.shows_danijel_pecek.ProgressBarView
+                    android:layout_width="@dimen/progress_bar_size"
+                    android:layout_height="@dimen/progress_bar_size"
+                    android:layout_gravity="center" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbarAddEpisode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:title="Add episode" />
+
+            <LinearLayout
+                android:id="@+id/uploadPhotoLinearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginTop="@dimen/spacing_4x"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:gravity="center"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbarAddEpisode">
+
+                <ImageView
+                    android:id="@+id/uploadPhotoImageView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/upload_photo_icon"
+                    android:maxWidth="104dp"
+                    app:srcCompat="@drawable/ic_camera" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_1x"
+                    android:text="@string/upload_photo"
+                    android:textColor="@color/main_color"
+                    android:textSize="@dimen/add_episode_upload_text"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/uploadPhotoImageView" />
+            </LinearLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/usernameInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginTop="@dimen/add_episode_input_margin_top"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/warning_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/uploadPhotoLinearLayout">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/episode_title"
+                    android:textSize="@dimen/text_input_size"
+                    android:theme="@style/EditTextTheme" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/seasonEpisodeTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginTop="@dimen/spacing_1x"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:text="@string/season_and_episode"
+                android:textColor="@color/season"
+                android:textSize="@dimen/add_episode_season_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usernameInputLayout" />
+
+            <TextView
+                android:id="@+id/pickSeasonEpisodeTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/add_episode_s_e_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/seasonEpisodeTextView" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/episodeDescriptionInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:hint="@string/episode_description"
+                app:errorEnabled="true"
+                app:errorTextAppearance="@style/warning_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pickSeasonEpisodeTextView">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/text_input_height"
+                    android:paddingBottom="@dimen/spacing_2x"
+                    android:textSize="@dimen/text_input_size"
+                    android:theme="@style/EditTextTheme"
+                    app:layout_constraintTop_toBottomOf="@+id/usernameEditText" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <Button
+                android:id="@+id/saveButton"
+                style="@style/CustomButton"
+                android:layout_marginTop="@dimen/spacing_1x"
+                android:layout_marginBottom="@dimen/spacing_2x"
+                android:enabled="false"
+                android:text="@string/button_save"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/episodeDescriptionInputLayout"
+                app:layout_constraintVertical_bias="1" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>

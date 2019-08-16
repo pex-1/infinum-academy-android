@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshComments"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:id="@+id/commentsConstraintLayoutSnackbar"
+        android:focusableInTouchMode="true"
+        tools:context=".ui.comments.CommentsActivity">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/commentsProgressBar"
+            style="@style/cardViewLoading"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <infinum.academy2019.shows_danijel_pecek.ProgressBarView
+                android:layout_width="@dimen/progress_bar_size"
+                android:layout_height="@dimen/progress_bar_size"
+                android:layout_gravity="center" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarComments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:title="Comments" />
+
+        <LinearLayout
+            android:id="@+id/commentsEmptyLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarComments">
+
+            <ImageView
+                android:layout_width="@dimen/comments_image_size"
+                android:layout_height="@dimen/comments_image_size"
+                android:layout_marginStart="@dimen/spacing_1x"
+                android:layout_marginEnd="@dimen/spacing_1x"
+                android:src="@drawable/img_placehoder_comments" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:lineHeight="22dp"
+                android:text="@string/comments_no_comments_message"
+                android:textAlignment="center"
+                android:textColor="@color/subtitle_text"
+                android:textSize="@dimen/comments_message_text_size" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commentsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/spacing_3x"
+            android:layout_marginEnd="@dimen/spacing_3x"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/commentWritingLayout"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbarComments"
+            tools:listitem="@layout/item_comment" />
+
+        <LinearLayout
+            android:id="@+id/commentWritingLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/comments_comment_input_size"
+            android:layout_marginBottom="@dimen/spacing_2x"
+            android:layout_marginStart="@dimen/spacing_3x"
+            android:layout_marginEnd="@dimen/spacing_3x"
+            android:background="@drawable/comments_background"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <EditText
+                android:id="@+id/commentEditText"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/spacing_2x"
+                android:layout_weight="5"
+                android:background="@null"
+                android:hint="@string/comments_input_hint" />
+
+            <TextView
+                android:id="@+id/postCommentTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_2x"
+                android:layout_weight="1"
+                android:gravity="end"
+                android:text="@string/comments_post_button"
+                android:textColor="@color/main_color"
+                android:textSize="@dimen/comments_post_button_size" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

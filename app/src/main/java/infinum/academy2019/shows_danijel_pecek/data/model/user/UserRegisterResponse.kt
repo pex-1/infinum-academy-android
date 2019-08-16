@@ -11,8 +11,10 @@ data class UserRegisterResponse(
 
 @JsonClass(generateAdapter = true)
 data class UserRegister(
+    @Json(name = "type")
     val type: String,
 
+    @Json(name = "email")
     val email: String,
 
     @Json(name = "_id")

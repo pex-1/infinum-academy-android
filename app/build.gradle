@@ -51,6 +51,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.0'
     kapt 'com.squareup.moshi:moshi-kotlin-codegen:1.8.0'
 
+    // Room //
+    implementation "androidx.room:room-runtime:2.1.0"
+    kapt "androidx.room:room-compiler:2.1.0"
+    debugImplementation 'im.dino:dbinspector:3.4.1@aar'
+    debugImplementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    // Picasso //
     implementation 'com.squareup.picasso:picasso:2.71828'
 
 }

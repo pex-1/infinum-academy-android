@@ -7,18 +7,23 @@
 
 
     <!--ProgressBar-->
-    <dimen name="default_thickness">3dp</dimen>
-    <dimen name="default_inner_padding">15dp</dimen>
-    <dimen name="progress_bar_size">60dp</dimen>
+    <dimen name="default_thickness">2dp</dimen>
+    <dimen name="default_inner_padding">10dp</dimen>
+    <dimen name="progress_bar_size">40dp</dimen>
 
     <integer name="default_anim_duration">3000</integer>
     <integer name="default_anim_step">3</integer>
     <integer name="default_start_angle">-90</integer>
 
     <!--General-->
-    <dimen name="spacing_1x">16dp</dimen>
+    <dimen name="spacing_1x">8dp</dimen>
+    <dimen name="spacing_2x">16dp</dimen>
+    <dimen name="spacing_3x">24dp</dimen>
+    <dimen name="spacing_4x">32dp</dimen>
     <dimen name="text_input_height">64dp</dimen>
     <dimen name="text_input_size">16sp</dimen>
+    <dimen name="max_width">360dp</dimen>
+    <dimen name="collapsing_toolbar_height">82dp</dimen>
 
     <!--Login Activity-->
     <dimen name="logo_size">80dp</dimen>
@@ -29,5 +34,24 @@
     <dimen name="login_checkbox_margin_top">16dp</dimen>
     <dimen name="login_or_margin_top">11dp</dimen>
     <dimen name="login_create_account_text_size">14sp</dimen>
+    <dimen name="login_button_top_margin">72dp</dimen>
+
+    <!--Add Episode Activity-->
+    <dimen name="add_episode_input_margin_top">71dp</dimen>
+    <dimen name="add_episode_upload_text">15sp</dimen>
+    <dimen name="add_episode_season_text_size">17sp</dimen>
+    <dimen name="add_episode_s_e_text_size">14sp</dimen>
+
+    <!--Comments Activity-->
+    <dimen name="comments_image_size">120dp</dimen>
+    <dimen name="comments_message_text_size">15sp</dimen>
+    <dimen name="comments_comment_input_size">42dp</dimen>
+    <dimen name="comments_post_button_size">14sp</dimen>
+
+    <dimen name="view_height">57dp</dimen>
+
+    <dimen name="register_button_top_margin">72dp</dimen>
+    <dimen name="like_dislike_image_size">40dp</dimen>
+
 
 </resources>
