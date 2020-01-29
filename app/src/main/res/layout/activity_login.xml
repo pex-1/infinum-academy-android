@@ -3,14 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/loginConstraintLayoutSnackbarl"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:maxWidth="@dimen/max_width"
     tools:context=".ui.login.LoginActivity">
 
 
     <androidx.cardview.widget.CardView
         android:id="@+id/loginProgressBar"
         style="@style/cardViewLoading"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <infinum.academy2019.shows_danijel_pecek.ProgressBarView
             android:layout_width="@dimen/progress_bar_size"
@@ -35,9 +41,9 @@
         android:id="@+id/usernameInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_1x"
+        android:layout_marginStart="@dimen/spacing_2x"
         android:layout_marginTop="@dimen/login_user_input_margin_top"
-        android:layout_marginEnd="@dimen/spacing_1x"
+        android:layout_marginEnd="@dimen/spacing_2x"
         app:errorEnabled="true"
         app:errorTextAppearance="@style/warning_style"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,8 +65,8 @@
         android:id="@+id/passwordInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_1x"
-        android:layout_marginEnd="@dimen/spacing_1x"
+        android:layout_marginStart="@dimen/spacing_2x"
+        android:layout_marginEnd="@dimen/spacing_2x"
         android:hint="@string/password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -97,7 +103,7 @@
     <Button
         android:id="@+id/logInButton"
         style="@style/CustomButton"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="@dimen/login_button_top_margin"
         android:enabled="false"
         android:text="@string/log_in"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,8 +127,8 @@
         android:id="@+id/registerTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_1x"
-        android:layout_marginStart="@dimen/spacing_1x"
+        android:layout_marginEnd="@dimen/spacing_2x"
+        android:layout_marginStart="@dimen/spacing_2x"
         android:text="@string/create_an_account"
         android:textColor="@color/main_color"
         android:textSize="@dimen/login_create_account_text_size"

@@ -5,35 +5,31 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.View
-import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.google.android.material.snackbar.Snackbar
 import infinum.academy2019.shows_danijel_pecek.Constants
 import infinum.academy2019.shows_danijel_pecek.R
+import infinum.academy2019.shows_danijel_pecek.Utils
 import infinum.academy2019.shows_danijel_pecek.data.model.user.User
-import infinum.academy2019.shows_danijel_pecek.data.repository.Repository
-import infinum.academy2019.shows_danijel_pecek.ui.FragmentContainerActivity
 import infinum.academy2019.shows_danijel_pecek.ui.register.RegisterActivity
-import infinum.academy2019.shows_danijel_pecek.ui.shared.LoginRegisterViewModel
 import infinum.academy2019.shows_danijel_pecek.ui.shared.onTextChange
-import infinum.academy2019.shows_danijel_pecek.ui.welcome.WelcomeActivity
+import infinum.academy2019.shows_danijel_pecek.ui.shows.ShowsActivity
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_login.usernameInputLayout
 
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: LoginRegisterViewModel
+    private lateinit var viewModel: LoginViewModel
 
     companion object{
         fun newInstance(context: Context) = Intent(context, LoginActivity::class.java)
 
         const val WARNING = "Please enter a valid email address"
-        const val SKIP_LOGIN = "SKIP_LOGIN"
     }
 
 
@@ -41,26 +37,49 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        val sharedPreferences = getPreferences(Context.MODE_PRIVATE)
-        var sharedPreferenceEditor: SharedPreferences.Editor
+        
 
-        if (sharedPreferences.getBoolean(SKIP_LOGIN, false)) {
-            startActivity(FragmentContainerActivity.newInstance(this))
+        val sharedPreferences =  getSharedPreferences(Constants.PREFERENCE_NAME,Context.MODE_PRIVATE)
+        var editor: SharedPreferences.Editor
+
+
+
+        if (sharedPreferences.getBoolean(Constants.SKIP_LOGIN, false)) {
+            startActivity(ShowsActivity.newInstance(this))
             finish()
         }
 
-        viewModel = ViewModelProviders.of(this).get(LoginRegisterViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        viewModel.resetApiError()
+        viewModel.apiError()
+        viewModel.apiErrorLiveData?.observe(this, Observer {
+            if(it != null){
+                if(Utils.networkAvailable(this)){
+                    createSnackbar(it)
+                }else{
+                    createSnackbar(Constants.NO_INTERNET)
+                }
+
+            }
+            loginProgressBar.visibility = View.GONE
+        })
+
         viewModel.liveData.observe(this, Observer {
             loginProgressBar.visibility = View.GONE
-            if(it){
-                Toast.makeText(applicationContext, "Login successful!", Toast.LENGTH_SHORT).show()
+            if(it != null){
                 if (rememberMeCheckBox.isChecked) {
-                    sharedPreferenceEditor = sharedPreferences.edit()
-                    sharedPreferenceEditor.putBoolean(SKIP_LOGIN, true)
-                    sharedPreferenceEditor.apply()
-                    startActivity(WelcomeActivity.newInstance(this, usernameEditText.text.toString().trim()))
-                    finishAffinity()
+                    editor = sharedPreferences.edit()
+                    editor.putBoolean(Constants.SKIP_LOGIN, true)
+                    editor.apply()
                 }
+                editor = sharedPreferences.edit()
+                editor.putString(Constants.TOKEN, it.userLogin.token)
+                editor.putString(Constants.USER_NAME, Utils.getUserName(usernameEditText.text.toString().trim()))
+                editor.apply()
+
+
+                startActivity(ShowsActivity.newInstance(this))
+                finishAffinity()
             }else{
                 Toast.makeText(applicationContext, "Login not successful!", Toast.LENGTH_SHORT).show()
             }
@@ -83,7 +102,7 @@ class LoginActivity : AppCompatActivity() {
 
         logInButton.setOnClickListener {
             loginProgressBar.visibility = View.VISIBLE
-            Repository.loginUser(User(usernameEditText.text.toString(), passwordEditText.text.toString()))
+            viewModel.loginUser(User(usernameEditText.text.toString(), passwordEditText.text.toString()))
         }
     }
 
@@ -100,7 +119,13 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
-    fun emailValid(email: String): Boolean {
+    private fun createSnackbar(message: String) {
+        val snackbar = Snackbar.make(loginConstraintLayoutSnackbarl, message, Snackbar.LENGTH_LONG)
+        snackbar.view.setBackgroundColor(ContextCompat.getColor(this, R.color.main_color))
+        snackbar.show()
+    }
+
+    private fun emailValid(email: String): Boolean {
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             usernameInputLayout.error = WARNING
             return false

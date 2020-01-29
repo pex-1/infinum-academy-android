@@ -9,6 +9,7 @@ object RetrofitClient {
 
     private const val BASE_URL = "https://api.infinum.academy/api/"
 
+
     val retrofitInstance: Retrofit?
         get() {
             if (retrofit == null) {

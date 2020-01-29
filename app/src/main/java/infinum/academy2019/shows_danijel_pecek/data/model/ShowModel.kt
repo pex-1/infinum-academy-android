@@ -16,7 +16,14 @@ data class ShowModel(
     val imageUrl: String,
 
     @Json(name = "likesCount")
-    val likesCount: Int
+    val likesCount: Int,
+
+    @Transient
+    val description: String = "",
+
+    @Transient
+    var episodeList: ArrayList<EpisodeModel> = arrayListOf()
+
 
 ){
     fun getImage() = Constants.IMAGE_BASE_URL + imageUrl

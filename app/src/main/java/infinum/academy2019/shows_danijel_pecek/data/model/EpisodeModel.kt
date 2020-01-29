@@ -6,7 +6,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class EpisodeModel(
     @Json(name = "_id")
-    val showId: String,
+    val episodeId: String,
 
     @Json(name = "title")
     val title: String,

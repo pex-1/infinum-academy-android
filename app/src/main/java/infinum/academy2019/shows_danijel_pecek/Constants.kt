@@ -2,13 +2,6 @@ package infinum.academy2019.shows_danijel_pecek
 
 class Constants {
     companion object{
-        const val alienNationDescription = "A flying saucer crashed in the Mojave Desert and its inhabitants turned out to be alien slaves, bred to be super intelligent and strong, and controllable by their Overseers. These Tenctonese, or \"Newcomers\", have been assimilated (sort of) into the population of Los Angeles."
-        const val bordertownDescription = "Follow two families living in a Southwest desert town on the United States-Mexico border and how these two families inevitably cross and are bound by friendship and conflict."
-        const val starWarsDescription = "The events and battles of the Galactic Republic's last major war are recounted."
-        const val jackDescription = "Jack is engaged to find a missing person, only to be later framed for his murder. Jack is quickly caught up in a complex web of powerful vested interests that stretches from his home town of Fitzroy to a remote village in the Philippines."
-        const val southParkDescription = "Follows the misadventures of four irreverent grade-schoolers in the quiet, dysfunctional town of South Park, Colorado."
-        const val duskDawnDescription = "A Texas Ranger is in hot pursuit of the infamous Gecko brothers and their hostages. They all end up trapped in a desert bar secretly run by vampires and discover a vampire conspiracy."
-        const val gangsterChroniclesDescription = "The series follows the lives of the three main characters from their youth into becoming major criminal figures in 1920's America."
 
         const val DESCRIPTION_EMPTY_WARNING = "Episode description can not be empty!"
         const val TITLE_EMPTY_WARNING = "Title field can not be empty!"
@@ -21,17 +14,20 @@ class Constants {
         const val REQUEST_CAMERA_PERMISSION = 7
         const val REQUEST_GALLERY_PERMISSION = 8
 
-        const val ADD_EPISODE_TAG = "ADD_EPISODE_TAG"
-        const val EPISODE_TAG = "EPISODE_TAG"
-        const val SHOW_TAG = "SHOW_TAG"
-
-        const val USER_REGISTRATION_SUCCESSFUL = "Registration successful!"
-        const val USER_REGISTRATION_UNSUCCESSFUL = "Registration unsuccessful"
-
-        const val USER_LOGIN_SUCCESSFUL = "Login successful!"
-        const val USER_LOGIN_UNSUCCESSFUL = "Login unsuccessful"
-
         const val IMAGE_BASE_URL = "https://api.infinum.academy"
+
+        const val TOKEN = "TOKEN"
+
+        const val PREFERENCE_NAME = "PREFERENCE_NAME"
+
+        const val USER_NAME = "USER_NAME"
+
+        const val LOG_OUT_DIALOG_TITLE = "Signing out"
+        const val LOG_OUT_DIALOG_MESSAGE = "You will be returned to the login screen."
+
+        const val SKIP_LOGIN = "SKIP_LOGIN"
+
+        const val NO_INTERNET = "No internet connection!"
 
     }
 }

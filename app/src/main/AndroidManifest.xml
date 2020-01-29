@@ -6,28 +6,36 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".MyShowsApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_logo_mark"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ui.comments.CommentsActivity" />
+        <activity android:name=".ui.add_episode.AddEpisodeActivity" />
+        <activity
+            android:name=".ui.show_details.ShowDetailsActivity"
+            android:theme="@style/AppTheme.NoActionAndStatusBar" />
+        <activity
+            android:name=".ui.episodes.EpisodeActivity"
+            android:theme="@style/AppTheme.NoActionAndStatusBar" />
+        <activity android:name=".ui.shows.ShowsActivity"/>
         <activity
             android:name=".ui.splash.SplashActivity"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.FragmentContainerActivity" />
         <activity android:name=".ui.welcome.WelcomeActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.login.LoginActivity" />
-
     </application>
 
 </manifest>
